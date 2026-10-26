@@ -74,6 +74,16 @@ nav svg,.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-widt
 .sheet h3{margin-bottom:12px}.sheet .lab{color:var(--mute);margin:14px 0 8px;font-size:13px}
 .tour{text-align:center;padding:8px 4px}.tour .em{font-size:54px}.tour h3{margin:8px 0 4px}.tour p{color:var(--mute);margin-bottom:16px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+html[data-pack=purple]{--a:#3F3F46;--b:#8E8E96;--bg:#F2F2F4;--glass:rgba(237,237,239,.7)}
+html[data-pack=purple][data-mode=dark]{--a:#52525B;--bg:#0B0B0E;--glass:rgba(34,34,38,.6)}
+@media(prefers-color-scheme:dark){html[data-pack=purple][data-mode=auto]{--a:#52525B;--bg:#0B0B0E;--glass:rgba(34,34,38,.6)}}
+header{border-radius:0 0 28px 28px;backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8)}
+nav{backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);border:1px solid rgba(255,255,255,.5)}
+.sheet{background:var(--glass);backdrop-filter:blur(34px) saturate(1.8);-webkit-backdrop-filter:blur(34px) saturate(1.8);border-radius:36px 36px 0 0}
+.card,.hero,.stage,.lcard{border-radius:30px}.btn{border-radius:22px}.ib,.seg button{border-radius:999px}.lcard input,#pq,#vtx{border-radius:18px!important}
+.ib,.btn,.seg button,nav button{transition:transform .15s}.ib:active,.btn:active,.seg button:active,nav button:active{transform:scale(.94)}
+.stage{overflow:hidden;position:sticky;top:0;z-index:6;max-height:40vh}#cv{max-height:40vh;touch-action:none;transition:transform .3s}
+#ptabs{flex-wrap:nowrap;overflow-x:auto}#ptabs button{flex:none}
 </style></head>
 <body>
 <section id="login">
@@ -81,7 +91,7 @@ nav svg,.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-widt
   <div id="fls"></div>
   <form class="lcard" id="lf">
     <img src="icon-192.png" alt="SW Editor">
-    <h1>SW Editor</h1><p>Photo aur video edit karein, kahin bhi.</p>
+    <h1>SW Editor</h1><p>Edit photos and videos anywhere.</p>
     <input id="em" type="email" placeholder="Email" autocomplete="username" required>
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required>
     <button class="btn" id="lb" type="submit">Sign in</button>
@@ -95,10 +105,10 @@ nav svg,.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-widt
   </header>
   <main>
     <div class="tab on" id="t-photo">
-      <div id="ph-empty"><div class="hero"><h2>Photo Edit</h2><p>Gallery se photo chunein aur edit shuru karein.</p></div>
-        <label class="btn" style="display:block;text-align:center;cursor:pointer">Photo chunein<input id="file" type="file" accept="image/*" hidden></label></div>
+      <div id="ph-empty"><div class="hero"><h2>Photo Edit</h2><p>Pick a photo from your gallery to start editing.</p></div>
+        <label class="btn" style="display:block;text-align:center;cursor:pointer">Choose photo<input id="file" type="file" accept="image/*" hidden></label></div>
       <div id="ph-ed" class="hide">
-        <div class="bar"><button class="ib" id="un">Undo</button><button class="ib" id="re">Redo</button><button class="ib" id="bf">Before</button><button class="ib" id="gd">Grid</button><button class="ib" id="nw">Nayi photo</button></div>
+        <div class="bar"><button class="ib" id="un">Undo</button><button class="ib" id="re">Redo</button><button class="ib" id="bf">Before</button><button class="ib" id="gd">Grid</button><button class="ib" id="zm">Zoom: on</button><button class="ib" id="nw">New photo</button></div>
         <div class="stage" id="stage"><canvas id="cv"></canvas><div class="grid hide" id="grid"></div></div>
         <div class="seg" id="ptabs" style="margin:12px 0"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="flt">Filters</button><button data-p="skin">Skin</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
         <div class="card pp" id="p-crop"><div class="seg" id="ratios"><button data-r="1">1:1</button><button data-r="0.8">4:5</button><button data-r="0.5625">9:16</button><button data-r="1.7778">16:9</button><button data-r="1.3333">4:3</button></div>
@@ -106,36 +116,36 @@ nav svg,.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-widt
         <div class="card pp hide" id="p-adj"><div class="sl"><span>Brightness</span><input type="range" id="a-b" min="-100" max="100" value="0"></div><div class="sl"><span>Contrast</span><input type="range" id="a-c" min="-100" max="100" value="0"></div><div class="sl"><span>Saturation</span><input type="range" id="a-s" min="-100" max="100" value="0"></div><div class="sl"><span>Sharpness</span><input type="range" id="a-sh" min="0" max="100" value="0"></div><button class="ib" id="a-rs" style="width:auto;padding:0 14px">Reset</button></div>
         <div class="card pp hide" id="p-flt"></div>
         <div class="card pp hide" id="p-skin"></div>
-        <div class="card pp hide" id="p-rs"><div class="sl"><span id="rs-l">Size 100%</span><input type="range" id="rs-r" min="20" max="100" value="100"></div><button class="btn" id="rs-go">Resize lagayein</button></div>
+        <div class="card pp hide" id="p-rs"><div class="sl"><span id="rs-l">Size 100%</span><input type="range" id="rs-r" min="20" max="100" value="100"></div><button class="btn" id="rs-go">Apply resize</button></div>
         <div class="card pp hide" id="p-ex"><div class="lab">Format</div><div class="seg" id="fm"><button data-v="jpeg" class="on">JPG</button><button data-v="png">PNG</button></div>
           <div class="lab" style="margin-top:10px">Quality</div><div class="seg" id="ql"><button data-v=".6">Low</button><button data-v=".8">Medium</button><button data-v=".95" class="on">High</button></div>
           <button class="ib" id="ex-pv" style="width:auto;padding:0 14px;margin-top:12px">Preview</button><button class="btn" id="ex-go" style="margin-top:14px">Save / Share</button></div>
       </div></div>
     <div class="tab" id="t-video">
-      <label class="btn" style="display:block;text-align:center;cursor:pointer">Video clips jorein<input id="vfile" type="file" accept="video/*" multiple hidden></label>
+      <label class="btn" style="display:block;text-align:center;cursor:pointer">Add video clips<input id="vfile" type="file" accept="video/*" multiple hidden></label>
       <div class="stage" style="margin-top:12px"><canvas id="vc" width="640" height="360" style="max-width:100%;max-height:42vh"></canvas></div>
-      <div class="bar" style="margin-top:10px"><button class="ib" id="vplay">Play</button><button class="ib" id="vsplit">Split</button><button class="ib" id="vdel">Delete</button><button class="ib" id="vl">Left</button><button class="ib" id="vr">Right</button></div>
+      <div class="bar" style="margin-top:10px"><button class="ib" id="vplay">Play</button><button class="ib" id="vsplit">Split</button><button class="ib" id="vdel">Delete</button><button class="ib" id="vbf">Before</button><button class="ib" id="vl">Left</button><button class="ib" id="vr">Right</button></div>
       <div class="seg" id="vclips" style="margin-bottom:10px"></div>
       <div class="card"><div class="sl"><span id="l-in">Trim start</span><input type="range" id="vin" min="0" max="1" step="0.1" value="0"></div><div class="sl"><span id="l-out">Trim end</span><input type="range" id="vout" min="0" max="1" step="0.1" value="1"></div><div class="sl"><span id="l-sk">Split position</span><input type="range" id="vseek" min="0" max="1" step="0.1" value="0"></div>
         <div class="lab">Speed</div><div class="seg" id="vsp"><button data-v="0.5">0.5x</button><button data-v="1" class="on">1x</button><button data-v="1.5">1.5x</button><button data-v="2">2x</button></div>
         <div class="sl" style="margin-top:10px"><span>Clip volume</span><input type="range" id="vvol" min="0" max="1" step="0.05" value="1"></div></div>
       <div class="card"><div class="lab">Aspect ratio</div><div class="seg" id="vas"><button data-v="0" class="on">Original</button><button data-v="0.5625">9:16</button><button data-v="1">1:1</button><button data-v="1.7778">16:9</button></div>
         <div class="lab" style="margin-top:10px">Filter</div><div class="seg" id="vfl"><button data-v="" class="on">None</button><button data-v="bw">B&amp;W</button><button data-v="warm">Warm</button><button data-v="cool">Cool</button><button data-v="vivid">Vivid</button><button data-v="fade">Fade</button></div>
-        <div class="lab" style="margin-top:10px">Text</div><input id="vtx" placeholder="Video par text likhein" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)">
-        <div class="seg" id="vtp" style="margin-top:8px"><button data-v="t">Upar</button><button data-v="m">Beech</button><button data-v="b" class="on">Neeche</button></div>
-        <div class="lab" style="margin-top:10px">Music</div><label class="ib" style="width:auto;padding:0 14px;display:inline-grid;cursor:pointer" id="vmus">Music chunein<input id="vmf" type="file" accept="audio/*" hidden></label>
+        <div class="lab" style="margin-top:10px">Text</div><input id="vtx" placeholder="Type text for the video" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)">
+        <div class="seg" id="vtp" style="margin-top:8px"><button data-v="t">Top</button><button data-v="m">Middle</button><button data-v="b" class="on">Bottom</button></div>
+        <div class="lab" style="margin-top:10px">Music</div><label class="ib" style="width:auto;padding:0 14px;display:inline-grid;cursor:pointer" id="vmus">Choose music<input id="vmf" type="file" accept="audio/*" hidden></label>
         <div class="sl" style="margin-top:8px"><span>Music volume</span><input type="range" id="vmv" min="0" max="1" step="0.05" value="0.7"></div></div>
       <div class="card"><div class="lab">Export quality</div><div class="seg" id="vrs"><button data-v="720" class="on">720p</button><button data-v="1080">1080p</button></div>
-        <button class="btn" id="vex" style="margin-top:12px">Export video</button><p id="vst" style="color:var(--mute);font-size:13px;margin-top:8px">Export real-time hota hai: video ki lambai jitna waqt lagta hai. Screen on rakhein, app band na karein.</p></div>
+        <button class="btn" id="vex" style="margin-top:12px">Export video</button><p id="vst" style="color:var(--mute);font-size:13px;margin-top:8px">Export runs in real time and takes as long as the video. Keep the screen on and don't close the app.</p></div>
     </div>
     <div class="tab" id="t-proj">
-      <input id="pq" placeholder="Projects search karein" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-bottom:10px">
+      <input id="pq" placeholder="Search projects" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-bottom:10px">
       <div class="seg" id="pfo" style="margin-bottom:12px"></div>
       <div id="plist"></div></div>
     <div class="tab" id="t-me"><div class="card"><div class="row"><span>Account</span><b id="who"></b></div>
-      <div class="row"><span>Theme</span><button class="ib" style="width:auto;padding:0 14px" id="me-theme">Badlein</button></div>
-      <div class="row"><span style="font-size:13px;color:var(--mute)">Cloud: photos 1000px tak save hoti hain, videos cloud pe save nahi hote.</span></div>
-      <div class="row"><span>Cache saaf karein</span><button class="ib" style="width:auto;padding:0 14px" id="clr">Saaf</button></div></div>
+      <div class="row"><span>Theme</span><button class="ib" style="width:auto;padding:0 14px" id="me-theme">Change</button></div>
+      <div class="row"><span style="font-size:13px;color:var(--mute)">Cloud: photos are saved up to 1000px; videos are not saved to the cloud.</span></div>
+      <div class="row"><span>Clear cache</span><button class="ib" style="width:auto;padding:0 14px" id="clr">Clear</button></div></div>
       <button class="btn" id="out">Logout</button></div>
   </main>
   <nav id="nav">
@@ -167,7 +177,7 @@ for(let i=0;i<9;i++){const d=document.createElement("div");d.className="fl"+(i%2
 // login
 $("#lf").onsubmit=async e=>{e.preventDefault();$("#err").textContent="";$("#lb").textContent="Signing in...";
  try{await signInWithEmailAndPassword(auth,$("#em").value.trim(),$("#pw").value)}
- catch(x){$("#err").textContent=({"auth/invalid-credential":"Email ya password galat hai.","auth/network-request-failed":"Internet check karein."})[x.code]||"Sign in nahi ho saka. Dobara koshish karein.";$("#lb").textContent="Sign in"}};
+ catch(x){$("#err").textContent=({"auth/invalid-credential":"Incorrect email or password.","auth/network-request-failed":"Check your internet connection."})[x.code]||"Couldn't sign in. Try again.";$("#lb").textContent="Sign in"}};
 onAuthStateChanged(auth,u=>{const on=!!u;$("#login").classList.toggle("hide",on);$("#app").classList.toggle("hide",!on);
  $("#lb").textContent="Sign in";if(unsub){unsub();unsub=null}P=[];rP();if(u){$("#who").textContent=u.email;unsub=onSnapshot(collection(db,"users",u.uid,"projects"),sn=>{P=sn.docs.map(d=>({id:d.id,...d.data()}));rP()},()=>{});if(!ls.get("toured"))tour()}});
 $("#out").onclick=()=>{buzz();signOut(auth)};
@@ -178,7 +188,7 @@ $("#nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;buzz();
 // sheets
 function sheet(html){const s=document.createElement("div");s.className="shade";s.innerHTML=`<div class="sheet">${html}</div>`;
  s.onclick=e=>{if(e.target===s)s.remove()};document.body.append(s);return s}
-function themeSheet(){const s=sheet(`<h3>Theme</h3><div class="lab">Colour</div><div class="seg" id="sp"><button data-v="purple">Purple-Pink</button><button data-v="orange">Sunset Orange</button><button data-v="amoled">AMOLED Black</button></div><div class="lab">Mode</div><div class="seg" id="sm"><button data-v="auto">Auto</button><button data-v="light">Light</button><button data-v="dark">Dark</button></div>`);
+function themeSheet(){const s=sheet(`<h3>Theme</h3><div class="lab">Colour</div><div class="seg" id="sp"><button data-v="purple">Soft Grey</button><button data-v="orange">Sunset Orange</button><button data-v="amoled">AMOLED Black</button></div><div class="lab">Mode</div><div class="seg" id="sm"><button data-v="auto">Auto</button><button data-v="light">Light</button><button data-v="dark">Dark</button></div>`);
  const mark=()=>{s.querySelectorAll("#sp button").forEach(b=>b.classList.toggle("on",b.dataset.v===(ls.get("pack")||"purple")));
   s.querySelectorAll("#sm button").forEach(b=>b.classList.toggle("on",b.dataset.v===(ls.get("mode")||"auto")))};mark();
  s.querySelector("#sp").onclick=e=>{if(e.target.dataset.v){buzz();ls.set("pack",e.target.dataset.v);applyTheme();mark()}};
@@ -187,14 +197,14 @@ $("#menu").onclick=themeSheet;$("#me-theme").onclick=themeSheet;
 $("#clr").onclick=async()=>{buzz();try{for(const k of await caches.keys())await caches.delete(k)}catch(e){}
  const r=await navigator.serviceWorker?.getRegistrations?.()||[];for(const x of r)await x.unregister();location.reload()};
 // welcome tour
-function tour(){const P=[["🖼️","Photo edit","Crop, filters, retouch aur text ik jagah."],["🎬","Video edit","Trim, music, captions aur export."],["📁","Projects","Drafts khud save hote hain."]];let i=0;
- const s=sheet("");const draw=()=>{s.querySelector(".sheet").innerHTML=`<div class="tour"><div class="em">${P[i][0]}</div><h3>${P[i][1]}</h3><p>${P[i][2]}</p><button class="btn" id="nx">${i<2?"Next":"Shuru karein"}</button></div>`;
+function tour(){const P=[["🖼️","Photo edit","Crop, filters, retouch and text in one place."],["🎬","Video edit","Trim, music, captions and export."],["📁","Projects","Drafts save automatically."]];let i=0;
+ const s=sheet("");const draw=()=>{s.querySelector(".sheet").innerHTML=`<div class="tour"><div class="em">${P[i][0]}</div><h3>${P[i][1]}</h3><p>${P[i][2]}</p><button class="btn" id="nx">${i<2?"Next":"Get started"}</button></div>`;
   s.querySelector("#nx").onclick=()=>{buzz();if(i<2){i++;draw()}else{ls.set("toured","1");s.remove()}}};draw()}
 
 // ---- photo editor (Part 2)
 const cv=$("#cv"),cx=cv.getContext("2d");
-const DEF=()=>({b:0,c:0,s:0,sh:0,f:'',fs:100,sm:0,gl:0,tn:0,ev:0,wr:0,sy:0,tp:0});
-let base=null,pv=null,adj=DEF(),hist=[],hi=-1,fmt="jpeg",qual=.95;
+const DEF=()=>({b:0,c:0,s:0,sh:0,f:'',fs:100,sm:0,gl:0,tn:0,ev:0,wr:0,sy:0,tp:0,wh:0,bd:0,fr:0,fx:.5,fy:.4});
+let base=null,pv=null,adj=DEF(),hist=[],hi=-1,fmt="jpeg",qual=.95,ct=false,ch=false,skinOpen=false,zm=true;
 const mk=(w,h)=>{const c=document.createElement("canvas");c.width=Math.max(1,Math.round(w));c.height=Math.max(1,Math.round(h));return c};
 const fit=(i,m)=>{const k=Math.min(1,m/Math.max(i.width,i.height)),c=mk(i.width*k,i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);return c};
 const FL={"Soft":{g:"Portrait",b:6,c:-8,s:-5,o:[8,2,-4]},"Warm glow":{g:"Portrait",b:8,c:-4,s:8,o:[14,4,-8]},"Rosy":{g:"Portrait",b:5,c:-6,s:4,o:[10,-2,4]},
@@ -206,28 +216,30 @@ function bl(s,w,h,r,ch){const T=new s.constructor(s.length),O=new s.constructor(
  for(let x=0;x<w;x++)for(let c=0;c<ch;c++){let a=0;for(let y=-r;y<=r;y++)a+=T[(cl(y,h-1)*w+x)*ch+c];for(let y=0;y<h;y++){O[(y*w+x)*ch+c]=a/n;a+=T[(cl(y+r+1,h-1)*w+x)*ch+c]-T[(cl(y-r,h-1)*w+x)*ch+c]}}
  return O}
 function proc(src,a){const w=src.width,h=src.height,o=mk(w,h),x=o.getContext("2d");x.drawImage(src,0,0);
- const F=FL[a.f],k=a.fs/100,sk=a.sm||a.gl||a.tn||a.ev||a.wr||a.sy||a.tp;
+ const F=FL[a.f],k=a.fs/100,sk=a.sm||a.gl||a.tn||a.ev||a.wr||a.sy||a.tp||a.wh;
  if(!a.b&&!a.c&&!a.s&&!a.sh&&!F&&!sk)return o;
  const id=x.getImageData(0,0,w,h),d=id.data;let B=a.b*2.55,C=1+a.c/100,S=1+a.s/100,of=[0,0,0];
  if(F){B+=(F.b||0)*2.55*k;C*=1+(F.c||0)/100*k;S*=1+(F.s||0)/100*k;if(F.o)of=F.o.map(v=>v*k);if(F.m)S*=1-k}
  for(let i=0;i<d.length;i+=4){let r=d[i]+B+of[0],g=d[i+1]+B+of[1],b=d[i+2]+B+of[2];r=(r-128)*C+128;g=(g-128)*C+128;b=(b-128)*C+128;const l=.299*r+.587*g+.114*b;d[i]=l+(r-l)*S;d[i+1]=l+(g-l)*S;d[i+2]=l+(b-l)*S}
  if(sk){const m=new Float32Array(w*h);
   for(let p=0;p<m.length;p++){const i=p*4,r=d[i],g=d[i+1],b=d[i+2],cb=128-.1687*r-.3313*g+.5*b,cr=128+.5*r-.4187*g-.0813*b;if(cb>77&&cb<127&&cr>133&&cr<173&&r>60)m[p]=1}
-  const rS=Math.max(2,Math.round(w/180)),mk2=bl(m,w,h,3,1),bs=(a.sm||a.gl)?bl(d,w,h,rS,4):0,bw=a.wr?bl(d,w,h,Math.max(1,rS>>1),4):0,be=a.ev?bl(d,w,h,rS*5,4):0;
-  for(let p=0;p<m.length;p++){const M=mk2[p];if(M<.03)continue;const i=p*4;let r=d[i],g=d[i+1],b=d[i+2],t;
-   if(a.sm){t=M*a.sm/100*.85;r+=(bs[i]-r)*t;g+=(bs[i+1]-g)*t;b+=(bs[i+2]-b)*t}
-   if(a.wr){t=M*a.wr/100*.8;r+=(bw[i]-r)*t;g+=(bw[i+1]-g)*t;b+=(bw[i+2]-b)*t}
-   if(a.ev){t=M*a.ev/100*.6;r+=(be[i]-r)*t;g+=(be[i+1]-g)*t;b+=(be[i+2]-b)*t}
-   if(a.gl){t=M*a.gl/100;r+=t*18;g+=t*14;b+=t*10}
-   if(a.tn){t=M*a.tn/100;r+=t*14;b-=t*12;if(t<0){r-=t*14;g-=t*14;b-=t*14}}
-   if(a.sy){const l=.299*r+.587*g+.114*b;if(l>165){t=M*a.sy/100*Math.min(1,(l-165)/60)*.6;r-=(r-150)*t;g-=(g-150)*t;b-=(b-150)*t}}
-   if(a.tp){t=M*a.tp/100;r+=10*t;g+=14*t;b+=16*t}
+  const rS=Math.max(2,Math.round(w/110)),mk2=bl(m,w,h,3,1),bs=(a.sm||a.gl)?bl(d,w,h,rS,4):0,bw=a.wr?bl(d,w,h,Math.max(1,rS>>1),4):0,be=a.ev?bl(d,w,h,rS*5,4):0;
+  for(let p=0;p<m.length;p++){let M=mk2[p];if(a.fr&&M>=.03){const dd=Math.hypot(p%w-a.fx*w,(p/w|0)-a.fy*h)/(a.fr/100*Math.min(w,h)),q=dd<1?1:dd<1.25?1-(dd-1)/.25:0;M*=q+(1-q)*a.bd/100}if(M<.03)continue;const i=p*4;let r=d[i],g=d[i+1],b=d[i+2],t;
+   if(a.sm){t=Math.min(1,M*a.sm/100*1.15);r+=(bs[i]-r)*t;g+=(bs[i+1]-g)*t;b+=(bs[i+2]-b)*t}
+   if(a.wr){t=Math.min(1,M*a.wr/100*1.1);r+=(bw[i]-r)*t;g+=(bw[i+1]-g)*t;b+=(bw[i+2]-b)*t}
+   if(a.ev){t=Math.min(1,M*a.ev/100);r+=(be[i]-r)*t;g+=(be[i+1]-g)*t;b+=(be[i+2]-b)*t}
+   if(a.gl){t=M*a.gl/100;r+=t*34;g+=t*26;b+=t*18}
+   if(a.tn){t=M*a.tn/100;r+=t*24;b-=t*20;if(t<0){r-=t*24;g-=t*24;b-=t*24}}
+   if(a.sy){const l=.299*r+.587*g+.114*b;if(l>165){t=M*a.sy/100*Math.min(1,(l-165)/60)*.9;r-=(r-150)*t;g-=(g-150)*t;b-=(b-150)*t}}
+   if(a.tp){t=M*a.tp/100;r+=22*t;g+=30*t;b+=34*t}if(a.wh){t=M*a.wh/100;const l2=.299*r+.587*g+.114*b;r+=(l2-r)*t*.25+t*38;g+=(l2-g)*t*.25+t*36;b+=(l2-b)*t*.25+t*34}
    d[i]=r;d[i+1]=g;d[i+2]=b}}
  if(a.sh){const kk=a.sh/100*1.2,st=w*4,t=new Uint8ClampedArray(d);
   for(let y=1;y<h-1;y++)for(let xx=1;xx<w-1;xx++){const p=y*st+xx*4;for(let c=0;c<3;c++)t[p+c]=d[p+c]*(1+4*kk)-kk*(d[p+c-4]+d[p+c+4]+d[p+c-st]+d[p+c+st])}
   d.set(t)}
  x.putImageData(id,0,0);return o}
-const render=()=>{const o=proc(pv,adj);cv.width=o.width;cv.height=o.height;cx.drawImage(o,0,0)};
+const render=()=>{const o=(ct||ch)?pv:proc(pv,adj);cv.width=o.width;cv.height=o.height;cx.drawImage(o,0,0);
+ if(skinOpen&&adj.fr&&!(ct||ch)){cx.save();cx.strokeStyle="rgba(255,255,255,.95)";cx.lineWidth=Math.max(2,o.width/220);cx.setLineDash([o.width/40,o.width/60]);cx.beginPath();cx.arc(adj.fx*o.width,adj.fy*o.height,adj.fr/100*Math.min(o.width,o.height),0,7);cx.stroke();cx.restore()}
+ if(skinOpen&&adj.fr&&zm){cv.style.transformOrigin=adj.fx*100+"% "+adj.fy*100+"%";cv.style.transform="scale(1.7)"}else cv.style.transform=""};
 function upd(){$("#un").disabled=hi<=0;$("#re").disabled=hi>=hist.length-1}
 function commit(){clearTimeout(saveT);saveT=setTimeout(saveP,3000);hist=hist.slice(0,hi+1);hist.push({c:base,a:{...adj}});if(hist.length>12)hist.shift();hi=hist.length-1;upd()}
 function sync(){[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"]].forEach(([k,id])=>$("#"+id).value=adj[k]);SK.forEach(([k])=>$("#k-"+k).value=adj[k]);$("#fs").value=adj.fs;markF()}
@@ -247,9 +259,13 @@ $("#ratios").onclick=e=>{const r=parseFloat(e.target.dataset.r);if(!r)return;geo
 $("#a-rs").onclick=()=>{adj=DEF();sync();render();commit()};
 $("#rs-r").oninput=e=>$("#rs-l").textContent="Size "+e.target.value+"%";
 $("#rs-go").onclick=()=>{const p=$("#rs-r").value/100;if(p<1)geo(b=>{const n=mk(b.width*p,b.height*p);n.getContext("2d").drawImage(b,0,0,n.width,n.height);return n});$("#rs-r").value=100;$("#rs-l").textContent="Size 100%"};
-$("#bf").onpointerdown=()=>{cx.drawImage(pv,0,0,cv.width,cv.height)};$("#bf").onpointerup=$("#bf").onpointerleave=()=>{if(pv)render()};
-$("#gd").onclick=()=>$("#grid").classList.toggle("hide");$("#cv").onclick=()=>$("#stage").classList.toggle("z");
-$("#ptabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;buzz();document.querySelectorAll("#ptabs button").forEach(b=>b.classList.toggle("on",b===e.target));document.querySelectorAll(".pp").forEach(x=>x.classList.toggle("hide",x.id!=="p-"+p))};
+
+$("#gd").onclick=()=>$("#grid").classList.toggle("hide");$("#zm").onclick=e=>{zm=!zm;e.target.textContent="Zoom: "+(zm?"on":"off");render()};
+$("#bf").onclick=e=>{ct=!ct;e.target.textContent=ct?"After":"Before";render()};
+cv.onpointerdown=()=>{if(!skinOpen){ch=true;render()}};
+cv.onpointerup=cv.onpointercancel=cv.onpointerleave=()=>{if(ch){ch=false;render()}};
+cv.onclick=e=>{if(!skinOpen||ct)return;const r=cv.getBoundingClientRect();adj.fx=(e.clientX-r.left)/r.width;adj.fy=(e.clientY-r.top)/r.height;if(!adj.fr)adj.fr=22;$("#k-fr").value=adj.fr;buzz();render();commit()};
+$("#ptabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;buzz();skinOpen=p==="skin";render();document.querySelectorAll("#ptabs button").forEach(b=>b.classList.toggle("on",b===e.target));document.querySelectorAll(".pp").forEach(x=>x.classList.toggle("hide",x.id!=="p-"+p))};
 const segPick=(id,fn)=>$(id).onclick=e=>{if(!e.target.dataset.v)return;buzz();document.querySelectorAll(id+" button").forEach(b=>b.classList.toggle("on",b===e.target));fn(e.target.dataset.v)};
 segPick("#fm",v=>fmt=v);segPick("#ql",v=>qual=+v);
 $("#ex-go").onclick=()=>{buzz();const o=proc(base,adj),ext=fmt==="png"?"png":"jpg";o.toBlob(bl=>{const f=new File([bl],"SW-Editor."+ext,{type:bl.type});
@@ -257,8 +273,8 @@ $("#ex-go").onclick=()=>{buzz();const o=proc(base,adj),ext=fmt==="png"?"png":"jp
  else{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download=f.name;a.click()}},"image/"+fmt,qual)};
 
 // ---- filters + skin (Part 3)
-const SK=[["sm","Skin smoothing"],["gl","Glow"],["tn","Skin tone (cool / fair to warm)"],["ev","Even-out"],["wr","Wrinkle smooth"],["sy","Shine remove"],["tp","Tan remove + brighten"]];
-$("#p-skin").innerHTML=SK.map(([k,n])=>`<div class="sl"><span>${n}</span><input type="range" id="k-${k}" min="${k==="tn"?-100:0}" max="100" value="0"></div>`).join("")+'<button class="ib" id="k-rs" style="width:auto;padding:0 14px">Reset skin</button><p style="color:var(--mute);font-size:12px;margin-top:8px">Skin colour khud pehchani jati hai. Face-point tools (teeth, eyes, makeup) baad ke part mein.</p>';
+const SK=[["sm","Skin smoothing"],["gl","Glow"],["tn","Skin tone (cool / fair to warm)"],["ev","Even-out"],["wr","Wrinkle smooth"],["sy","Shine remove"],["tp","Tan remove + brighten"],["wh","Whiten / fair skin"],["fr","Face size (tap the face first)"],["bd","Body skin (neck, arms, legs)"]];
+$("#p-skin").innerHTML=SK.map(([k,n])=>`<div class="sl"><span>${n}</span><input type="range" id="k-${k}" min="${k==="tn"?-100:0}" max="100" value="0"></div>`).join("")+'<button class="ib" id="k-rs" style="width:auto;padding:0 14px">Reset skin</button><p style="color:var(--mute);font-size:12px;margin-top:8px">Skin is detected by colour. Tap the face on the photo to select it. Face-point tools (teeth, eyes, makeup) come later.</p>';
 SK.forEach(([k])=>{const el=$("#k-"+k);let q=0;el.oninput=()=>{adj[k]=+el.value;if(!q)q=requestAnimationFrame(()=>{q=0;render()})};el.onchange=()=>{adj[k]=+el.value;render();commit()}});
 $("#k-rs").onclick=()=>{SK.forEach(([k])=>adj[k]=0);sync();render();commit()};
 const favs=()=>{try{return JSON.parse(ls.get("favs")||"[]")}catch(e){return[]}};
@@ -279,13 +295,13 @@ drawF();
 
 // ---- video editor (Part 4)
 const vc=$("#vc"),vx=vc.getContext("2d"),pe=document.createElement("video");pe.muted=true;pe.playsInline=true;
-let VC=[],vi=-1,running=false,asp="0",vfil="",vtxt="",vpos="b",mus=null,mvol=.7,vres=720;
+let vcmp=false,VC=[],vi=-1,running=false,asp="0",vfil="",vtxt="",vpos="b",mus=null,mvol=.7,vres=720;
 const cur=()=>VC[vi],st=t=>$("#vst").textContent=t;
 function dims(){const r=asp==="0"?(VC[0]?VC[0].w/VC[0].h:16/9):+asp;let W,H;if(r>=1){H=vres;W=H*r}else{W=vres;H=W/r}return[Math.round(W/2)*2,Math.round(H/2)*2]}
 function vDraw(v,W,H){if(vc.width!==W||vc.height!==H){vc.width=W;vc.height=H}
  vx.fillStyle="#000";vx.fillRect(0,0,W,H);const k=Math.max(W/v.videoWidth,H/v.videoHeight),w=v.videoWidth*k,h=v.videoHeight*k;vx.drawImage(v,(W-w)/2,(H-h)/2,w,h);
  const ov=(m,c)=>{vx.globalCompositeOperation=m;vx.fillStyle=c;vx.fillRect(0,0,W,H);vx.globalCompositeOperation="source-over"};
- if(vfil==="bw")ov("saturation","#808080");else if(vfil==="warm")ov("soft-light","rgba(255,150,40,.4)");else if(vfil==="cool")ov("soft-light","rgba(40,120,255,.4)");else if(vfil==="vivid")ov("saturation","rgba(255,0,0,.4)");else if(vfil==="fade")ov("source-over","rgba(255,255,255,.14)");
+ if(vcmp){}else if(vfil==="bw")ov("saturation","#808080");else if(vfil==="warm")ov("soft-light","rgba(255,150,40,.4)");else if(vfil==="cool")ov("soft-light","rgba(40,120,255,.4)");else if(vfil==="vivid")ov("saturation","rgba(255,0,0,.4)");else if(vfil==="fade")ov("source-over","rgba(255,255,255,.14)");
  if(vtxt){vx.font=`700 ${Math.round(H*.06)}px Sora,Inter,sans-serif`;vx.textAlign="center";vx.textBaseline="middle";vx.lineWidth=H*.012;vx.strokeStyle="#000";vx.fillStyle="#fff";const y=vpos==="t"?H*.12:vpos==="m"?H*.5:H*.88;vx.strokeText(vtxt,W/2,y,W*.9);vx.fillText(vtxt,W/2,y,W*.9)}}
 function show(){const c=cur();if(!c||running)return;const[W,H]=dims();if(pe.dataset.u!==c.url){pe.dataset.u=c.url;pe.src=c.url}
  pe.onseeked=()=>vDraw(pe,W,H);pe.currentTime=c.cur??c.in}
@@ -301,26 +317,27 @@ $("#vin").onchange=()=>{rClips();rCtl()};
 $("#vout").oninput=e=>{const c=cur();if(!c)return;c.out=Math.max(+e.target.value,c.in+.3);c.cur=c.out;lab();show()};
 $("#vout").onchange=()=>{rClips();rCtl()};
 $("#vseek").oninput=e=>{const c=cur();if(!c)return;c.cur=Math.min(c.out,Math.max(c.in,+e.target.value));lab();show()};
-$("#vsplit").onclick=()=>{const c=cur();if(!c)return;const t=c.cur??c.in;if(t>c.in+.3&&t<c.out-.3){buzz();VC.splice(vi+1,0,{...c,in:t,cur:t});c.out=t;c.cur=t;rClips();rCtl()}else st("Split ke liye Split position ko trim ke beech mein layein.")};
+$("#vsplit").onclick=()=>{const c=cur();if(!c)return;const t=c.cur??c.in;if(t>c.in+.3&&t<c.out-.3){buzz();VC.splice(vi+1,0,{...c,in:t,cur:t});c.out=t;c.cur=t;rClips();rCtl()}else st("Move Split position inside the trim range to split.")};
 $("#vdel").onclick=()=>{if(!cur())return;buzz();VC.splice(vi,1);vi=Math.min(vi,VC.length-1);rClips();rCtl();show()};
 const mv=d=>{const j=vi+d;if(!cur()||j<0||j>=VC.length)return;buzz();[VC[vi],VC[j]]=[VC[j],VC[vi]];vi=j;rClips()};$("#vl").onclick=()=>mv(-1);$("#vr").onclick=()=>mv(1);
 $("#vvol").oninput=e=>{if(cur())cur().vol=+e.target.value};
 segPick("#vsp",v=>{if(cur())cur().sp=+v});segPick("#vas",v=>{asp=v;show()});segPick("#vfl",v=>{vfil=v;show()});segPick("#vtp",v=>{vpos=v;show()});segPick("#vrs",v=>vres=+v);
 $("#vtx").oninput=e=>{vtxt=e.target.value;show()};
 $("#vmf").onchange=e=>{const f=e.target.files[0];if(f){mus=URL.createObjectURL(f);$("#vmus").firstChild.textContent="Music: "+f.name.slice(0,18)}};$("#vmv").oninput=e=>mvol=+e.target.value;
-async function run(rec){if(!VC.length||running)return;running=true;const[W,H]=dims();vc.width=W;vc.height=H;
+async function run(rec){if(!VC.length||running)return;running=true;vcmp=false;$("#vbf").textContent="Before";const[W,H]=dims();vc.width=W;vc.height=H;
  const ac=new(window.AudioContext||window.webkitAudioContext)(),dst=ac.createMediaStreamDestination();let mr,ch=[],ma=null;
  const wire=(el,vol)=>{const s=ac.createMediaElementSource(el),g=ac.createGain();g.gain.value=vol;s.connect(g);g.connect(dst);if(!rec)g.connect(ac.destination)};
  if(mus){ma=new Audio(mus);ma.loop=true;wire(ma,mvol)}
- if(rec){const mt=["video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9","video/webm"].find(t=>MediaRecorder.isTypeSupported(t));mr=new MediaRecorder(new MediaStream([...vc.captureStream(30).getVideoTracks(),...dst.stream.getAudioTracks()]),{mimeType:mt,videoBitsPerSecond:vres>=1080?8e6:5e6});mr.ondataavailable=e=>e.data.size&&ch.push(e.data);mr.start(500);st("Export chal raha hai... app band na karein.")}
+ if(rec){const mt=["video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9","video/webm"].find(t=>MediaRecorder.isTypeSupported(t));mr=new MediaRecorder(new MediaStream([...vc.captureStream(30).getVideoTracks(),...dst.stream.getAudioTracks()]),{mimeType:mt,videoBitsPerSecond:vres>=1080?8e6:5e6});mr.ondataavailable=e=>e.data.size&&ch.push(e.data);mr.start(500);st("Exporting... don't close the app.")}
  $("#vplay").textContent="Stop";if(ma)ma.play();
  for(const c of VC){if(!running)break;const v=document.createElement("video");v.playsInline=true;v.src=c.url;await new Promise(r=>v.onloadedmetadata=r);wire(v,c.vol);
   v.currentTime=c.in;await new Promise(r=>v.onseeked=r);v.playbackRate=c.sp;await v.play();
   await new Promise(res=>{const f=()=>{if(!running||v.currentTime>=c.out||v.ended){v.pause();return res()}vDraw(v,W,H);requestAnimationFrame(f)};f()})}
  if(ma)ma.pause();const done=running;running=false;$("#vplay").textContent="Play";
- if(rec&&mr){await new Promise(r=>{mr.onstop=r;mr.stop()});if(done){const bl=new Blob(ch,{type:mr.mimeType}),f=new File([bl],"SW-Editor."+(bl.type.includes("mp4")?"mp4":"webm"),{type:bl.type});st("Export ho gaya.");
-  if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});else{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download=f.name;a.click()}}else st("Export rok diya gaya.")}
+ if(rec&&mr){await new Promise(r=>{mr.onstop=r;mr.stop()});if(done){const bl=new Blob(ch,{type:mr.mimeType}),f=new File([bl],"SW-Editor."+(bl.type.includes("mp4")?"mp4":"webm"),{type:bl.type});st("Export complete.");
+  if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});else{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download=f.name;a.click()}}else st("Export stopped.")}
  ac.close();show()}
+$("#vbf").onclick=e=>{vcmp=!vcmp;e.target.textContent=vcmp?"After":"Before";show()};
 $("#vplay").onclick=()=>{buzz();if(running)running=false;else run(false)};
 $("#vex").onclick=()=>{buzz();run(true)};
 
@@ -332,15 +349,15 @@ async function saveP(){if(!base||!auth.currentUser)return;if(!pid)pid="p"+Date.n
 function rP(){const L=$("#plist");if(!L)return;const fo=[...new Set(P.map(p=>p.folder).filter(Boolean))];
  $("#pfo").innerHTML=`<button data-f="all" class="${pfo==="all"?"on":""}">All</button><button data-f="fav" class="${pfo==="fav"?"on":""}">Favourites</button>`+fo.map(f=>`<button data-f="f:${esc(f)}" class="${pfo==="f:"+f?"on":""}">${esc(f)}</button>`).join("");
  const q=pq.toLowerCase(),l=P.filter(p=>(pfo==="all"||(pfo==="fav"?p.fav:"f:"+p.folder===pfo))&&(!q||(p.name||"").toLowerCase().includes(q))).sort((a,b)=>b.ts-a.ts);
- L.innerHTML=l.length?l.map(p=>`<div class="card" data-id="${p.id}"><div style="display:flex;gap:12px"><img src="${p.img}" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:12px"><div style="flex:1;min-width:0"><h3>${esc(p.name)}</h3><p>${new Date(p.ts).toLocaleDateString()}${p.folder?" • "+esc(p.folder):""}</p></div></div><div class="seg" style="margin-top:10px"><button data-a="open">Open</button><button data-a="fav">${p.fav?"★":"☆"}</button><button data-a="ren">Rename</button><button data-a="mv">Folder</button><button data-a="del">Delete</button></div></div>`).join(""):'<div class="card"><h3>Koi project nahi</h3><p>Photo edit karein, draft khud yahan save ho jayega.</p></div>'}
+ L.innerHTML=l.length?l.map(p=>`<div class="card" data-id="${p.id}"><div style="display:flex;gap:12px"><img src="${p.img}" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:12px"><div style="flex:1;min-width:0"><h3>${esc(p.name)}</h3><p>${new Date(p.ts).toLocaleDateString()}${p.folder?" • "+esc(p.folder):""}</p></div></div><div class="seg" style="margin-top:10px"><button data-a="open">Open</button><button data-a="fav">${p.fav?"★":"☆"}</button><button data-a="ren">Rename</button><button data-a="mv">Folder</button><button data-a="del">Delete</button></div></div>`).join(""):'<div class="card"><h3>No projects yet</h3><p>Edit a photo and its draft will be saved here automatically.</p></div>'}
 $("#pq").oninput=e=>{pq=e.target.value;rP()};
 $("#pfo").onclick=e=>{const f=e.target.dataset.f;if(f){pfo=f.replace(/&amp;/g,"&");rP()}};
 $("#plist").onclick=async e=>{const a=e.target.dataset.a,c=e.target.closest("[data-id]");if(!a||!c)return;const p=P.find(x=>x.id===c.dataset.id);if(!p)return;buzz();
  if(a==="open"){const im=new Image();im.onload=()=>{pid=p.id;hist=[];hi=-1;adj={...DEF(),...JSON.parse(p.adj||"{}")};sync();setBase(fit(im,3000));$("#ph-empty").classList.add("hide");$("#ph-ed").classList.remove("hide");document.querySelector('nav [data-t=photo]').click()};im.src=p.img}
  else if(a==="fav")setDoc(pref(p.id),{fav:!p.fav},{merge:true});
- else if(a==="ren"){const n=prompt("Naya naam",p.name);if(n)setDoc(pref(p.id),{name:n.slice(0,60)},{merge:true})}
- else if(a==="mv"){const n=prompt("Folder ka naam (khali = koi folder nahi)",p.folder||"");if(n!==null)setDoc(pref(p.id),{folder:n.trim().slice(0,30)},{merge:true})}
- else if(a==="del"&&confirm("Ye project delete karein?")){if(pid===p.id)pid=null;deleteDoc(pref(p.id))}};
+ else if(a==="ren"){const n=prompt("New name",p.name);if(n)setDoc(pref(p.id),{name:n.slice(0,60)},{merge:true})}
+ else if(a==="mv"){const n=prompt("Folder name (empty = no folder)",p.folder||"");if(n!==null)setDoc(pref(p.id),{folder:n.trim().slice(0,30)},{merge:true})}
+ else if(a==="del"&&confirm("Delete this project?")){if(pid===p.id)pid=null;deleteDoc(pref(p.id))}};
 $("#ex-pv").onclick=()=>{if(!base)return;buzz();sheet(`<h3>Preview</h3><img src="${proc(base,adj).toDataURL("image/jpeg",.85)}" alt="" style="max-width:100%;border-radius:14px">`)};
 rP();
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
