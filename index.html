@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SW Editor</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SW Editor">
+<meta name="theme-color" content="#7C3AED">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F6F8FD;--card:#fff;--ink:#12122A;--mute:#6B6F8A;--line:rgba(18,18,42,.1);--a:#7C3AED;--b:#06B6D4;--grad:linear-gradient(135deg,var(--a),var(--b));--glass:rgba(255,255,255,.72);--sh:0 10px 30px rgba(40,30,90,.15)}
+[data-pack=orange]{--a:#F97316;--b:#EC4899}
+@media(prefers-color-scheme:dark){html[data-mode=auto]{--bg:#0B0B16;--card:#16162A;--ink:#F2F2FA;--mute:#9A9CB8;--line:rgba(255,255,255,.1);--glass:rgba(24,24,44,.7);--sh:0 10px 30px rgba(0,0,0,.5)}}
+html[data-mode=dark]{--bg:#0B0B16;--card:#16162A;--ink:#F2F2FA;--mute:#9A9CB8;--line:rgba(255,255,255,.1);--glass:rgba(24,24,44,.7);--sh:0 10px 30px rgba(0,0,0,.5)}
+[data-pack=amoled]{--bg:#000;--card:#0E0E12;--ink:#F2F2FA;--mute:#8E90A8;--line:rgba(255,255,255,.1);--glass:rgba(14,14,18,.72);--a:#8B5CF6;--b:#22D3EE;--sh:0 10px 30px rgba(0,0,0,.8)}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font:15px/1.45 Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+h1,h2,h3,.brand{font-family:Sora,Inter,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit}
+:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.hide{display:none!important}
+/* login */
+#login{position:fixed;inset:0;display:grid;place-items:center;padding:24px;overflow:hidden;background:var(--bg)}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:drift 14s ease-in-out infinite alternate}
+.blob.b1{width:60vmax;height:60vmax;background:var(--a);left:-20vmax;top:-20vmax}
+.blob.b2{width:55vmax;height:55vmax;background:var(--b);right:-18vmax;bottom:-18vmax;animation-delay:-6s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.fl{position:absolute;width:64px;height:48px;border-radius:10px;border:2px solid var(--line);background:var(--glass);backdrop-filter:blur(6px);animation:rise 16s linear infinite;opacity:0}
+.fl.v::after{content:"";position:absolute;inset:0;margin:auto;width:0;height:0;border-left:14px solid var(--a);border-top:9px solid transparent;border-bottom:9px solid transparent}
+@keyframes rise{0%{transform:translateY(110vh) rotate(-8deg);opacity:0}10%{opacity:.8}90%{opacity:.8}100%{transform:translateY(-20vh) rotate(10deg);opacity:0}}
+.lcard{position:relative;width:100%;max-width:380px;padding:28px 24px;border-radius:28px;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);box-shadow:var(--sh);text-align:center}
+.lcard img{width:88px;height:88px;border-radius:22px;box-shadow:var(--sh)}
+.lcard h1{font-size:26px;margin:14px 0 2px}.lcard p{color:var(--mute);margin-bottom:18px}
+.lcard input{width:100%;padding:14px 16px;margin-bottom:10px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.btn{width:100%;padding:14px;border-radius:14px;background:var(--grad);color:#fff;font-weight:600;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+#err{color:#E11D48;min-height:20px;margin-top:10px;font-size:13px}
+/* app */
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+header img{width:36px;height:36px;border-radius:10px}
+.brand{font-weight:700;font-size:18px;flex:1}
+.ib{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line)}
+main{flex:1;overflow:auto;padding:18px 16px calc(110px + env(safe-area-inset-bottom))}
+.tab{display:none;animation:in .25s}.tab.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.hero{padding:22px;border-radius:24px;background:var(--grad);color:#fff;margin-bottom:16px}
+.hero h2{font-size:22px;margin-bottom:4px}.hero p{opacity:.9}
+.card{padding:16px;border-radius:20px;background:var(--card);border:1px solid var(--line);margin-bottom:12px}
+.card h3{font-size:16px;margin-bottom:4px}.card p{color:var(--mute);font-size:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.seg button.on{background:var(--grad);color:#fff;border-color:transparent}
+/* nav capsule */
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));display:flex;gap:4px;padding:6px;border-radius:999px;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line);box-shadow:var(--sh)}
+nav button{width:62px;height:50px;border-radius:999px;display:grid;place-items:center;color:var(--mute);transition:.2s}
+nav button.on{background:var(--grad);color:#fff}
+nav svg,.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+/* sheet + tour */
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;z-index:9}
+.sheet{width:100%;max-width:480px;background:var(--bg);border-radius:28px 28px 0 0;padding:22px 18px calc(24px + env(safe-area-inset-bottom));animation:up .25s}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sheet h3{margin-bottom:12px}.sheet .lab{color:var(--mute);margin:14px 0 8px;font-size:13px}
+.tour{text-align:center;padding:8px 4px}.tour .em{font-size:54px}.tour h3{margin:8px 0 4px}.tour p{color:var(--mute);margin-bottom:16px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body>
+<section id="login">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div id="fls"></div>
+  <form class="lcard" id="lf">
+    <img src="icon-192.png" alt="SW Editor">
+    <h1>SW Editor</h1><p>Photo aur video edit karein, kahin bhi.</p>
+    <input id="em" type="email" placeholder="Email" autocomplete="username" required>
+    <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required>
+    <button class="btn" id="lb" type="submit">Sign in</button>
+    <div id="err" role="alert"></div>
+  </form>
+</section>
+
+<div id="app" class="hide">
+  <header><img src="mark.png" alt=""><div class="brand">SW Editor</div>
+    <button class="ib" id="menu" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </header>
+  <main>
+    <div class="tab on" id="t-photo"><div class="hero"><h2>Photo Edit</h2><p>Gallery se photo chunein aur edit shuru karein.</p></div><div class="card"><h3>Editor jald aa raha hai</h3><p>Part 2 mein photo editor add hoga.</p></div></div>
+    <div class="tab" id="t-video"><div class="hero"><h2>Video Edit</h2><p>Clips jorein, trim karein, music lagayein.</p></div><div class="card"><h3>Editor jald aa raha hai</h3><p>Part 4 mein video editor add hoga.</p></div></div>
+    <div class="tab" id="t-proj"><div class="hero"><h2>Projects</h2><p>Aapke drafts aur saved kaam yahan honge.</p></div><div class="card"><h3>Abhi koi project nahi</h3><p>Photo ya video edit karein, draft yahan save ho jayega.</p></div></div>
+    <div class="tab" id="t-me"><div class="card"><div class="row"><span>Account</span><b id="who"></b></div>
+      <div class="row"><span>Theme</span><button class="ib" style="width:auto;padding:0 14px" id="me-theme">Badlein</button></div>
+      <div class="row"><span>Cache saaf karein</span><button class="ib" style="width:auto;padding:0 14px" id="clr">Saaf</button></div></div>
+      <button class="btn" id="out">Logout</button></div>
+  </main>
+  <nav id="nav">
+    <button data-t="photo" class="on" aria-label="Photo"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 9"/></svg></button>
+    <button data-t="video" aria-label="Video"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4.5-2.5z"/></svg></button>
+    <button data-t="proj" aria-label="Projects"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></button>
+    <button data-t="me" aria-label="Me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button>
+  </nav>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const fb=initializeApp({apiKey:"AIzaSyCqvY3qjtTYmK2D5sLkEK68qk-tbMK7Xks",authDomain:"sw-editor-869d9.firebaseapp.com",projectId:"sw-editor-869d9",storageBucket:"sw-editor-869d9.firebasestorage.app",messagingSenderId:"926525381109",appId:"1:926525381109:web:a758f5ce4c231e5b34a8bc"});
+const auth=getAuth(fb);
+const $=s=>document.querySelector(s),H=document.documentElement;
+const buzz=()=>{try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}};
+const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+// themes
+function applyTheme(){H.dataset.pack=ls.get("pack")||"purple";H.dataset.mode=ls.get("mode")||"auto";
+ const c=getComputedStyle(H).getPropertyValue("--a").trim();document.querySelector('meta[name=theme-color]').content=c}
+applyTheme();
+// floating frames
+for(let i=0;i<9;i++){const d=document.createElement("div");d.className="fl"+(i%2?" v":"");
+ d.style.cssText=`left:${5+i*11}%;animation-delay:${-i*1.8}s;animation-duration:${13+i%4*3}s;scale:${.8+i%3*.3}`;$("#fls").append(d)}
+// login
+$("#lf").onsubmit=async e=>{e.preventDefault();$("#err").textContent="";$("#lb").textContent="Signing in...";
+ try{await signInWithEmailAndPassword(auth,$("#em").value.trim(),$("#pw").value)}
+ catch(x){$("#err").textContent=({"auth/invalid-credential":"Email ya password galat hai.","auth/network-request-failed":"Internet check karein."})[x.code]||"Sign in nahi ho saka. Dobara koshish karein.";$("#lb").textContent="Sign in"}};
+onAuthStateChanged(auth,u=>{const on=!!u;$("#login").classList.toggle("hide",on);$("#app").classList.toggle("hide",!on);
+ $("#lb").textContent="Sign in";if(u){$("#who").textContent=u.email;if(!ls.get("toured"))tour()}});
+$("#out").onclick=()=>{buzz();signOut(auth)};
+// nav
+$("#nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;buzz();
+ document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+ document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.id==="t-"+b.dataset.t));$("main").scrollTop=0};
+// sheets
+function sheet(html){const s=document.createElement("div");s.className="shade";s.innerHTML=`<div class="sheet">${html}</div>`;
+ s.onclick=e=>{if(e.target===s)s.remove()};document.body.append(s);return s}
+function themeSheet(){const s=sheet(`<h3>Theme</h3><div class="lab">Colour</div><div class="seg" id="sp"><button data-v="purple">Purple-Pink</button><button data-v="orange">Sunset Orange</button><button data-v="amoled">AMOLED Black</button></div><div class="lab">Mode</div><div class="seg" id="sm"><button data-v="auto">Auto</button><button data-v="light">Light</button><button data-v="dark">Dark</button></div>`);
+ const mark=()=>{s.querySelectorAll("#sp button").forEach(b=>b.classList.toggle("on",b.dataset.v===(ls.get("pack")||"purple")));
+  s.querySelectorAll("#sm button").forEach(b=>b.classList.toggle("on",b.dataset.v===(ls.get("mode")||"auto")))};mark();
+ s.querySelector("#sp").onclick=e=>{if(e.target.dataset.v){buzz();ls.set("pack",e.target.dataset.v);applyTheme();mark()}};
+ s.querySelector("#sm").onclick=e=>{if(e.target.dataset.v){buzz();ls.set("mode",e.target.dataset.v);applyTheme();mark()}}}
+$("#menu").onclick=themeSheet;$("#me-theme").onclick=themeSheet;
+$("#clr").onclick=async()=>{buzz();try{for(const k of await caches.keys())await caches.delete(k)}catch(e){}
+ const r=await navigator.serviceWorker?.getRegistrations?.()||[];for(const x of r)await x.unregister();location.reload()};
+// welcome tour
+function tour(){const P=[["🖼️","Photo edit","Crop, filters, retouch aur text ik jagah."],["🎬","Video edit","Trim, music, captions aur export."],["📁","Projects","Drafts khud save hote hain."]];let i=0;
+ const s=sheet("");const draw=()=>{s.querySelector(".sheet").innerHTML=`<div class="tour"><div class="em">${P[i][0]}</div><h3>${P[i][1]}</h3><p>${P[i][2]}</p><button class="btn" id="nx">${i<2?"Next":"Shuru karein"}</button></div>`;
+  s.querySelector("#nx").onclick=()=>{buzz();if(i<2){i++;draw()}else{ls.set("toured","1");s.remove()}}};draw()}
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body></html>
