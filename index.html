@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en" data-pack="purple" data-mode="auto"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SW Editor</title>
@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#15803D">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=Inter:wght@400;500;600&display=swap">
 <style>
-:root{--bg:#F6F8FD;--card:#fff;--ink:#12122A;--mute:#6B6F8A;--line:rgba(18,18,42,.1);--a:#7C3AED;--b:#06B6D4;--grad:linear-gradient(135deg,var(--a),var(--b));--glass:rgba(255,255,255,.72);--sh:0 10px 30px rgba(40,30,90,.15)}
+:root{--bg:#F4F9F5;--card:#fff;--ink:#0F1F2E;--mute:#5E6F68;--line:rgba(15,31,46,.1);--a:#15803D;--b:#22C55E;--grad:linear-gradient(135deg,var(--a),var(--b));--glass:rgba(255,255,255,.72);--sh:0 10px 30px rgba(40,30,90,.15)}
 [data-pack=orange]{--a:#F97316;--b:#EC4899}
 @media(prefers-color-scheme:dark){html[data-mode=auto]{--bg:#0B0B16;--card:#16162A;--ink:#F2F2FA;--mute:#9A9CB8;--line:rgba(255,255,255,.1);--glass:rgba(24,24,44,.7);--sh:0 10px 30px rgba(0,0,0,.5)}}
 html[data-mode=dark]{--bg:#0B0B16;--card:#16162A;--ink:#F2F2FA;--mute:#9A9CB8;--line:rgba(255,255,255,.1);--glass:rgba(24,24,44,.7);--sh:0 10px 30px rgba(0,0,0,.5)}
@@ -100,6 +100,27 @@ main:has(#t-photo.on #ph-ed:not(.hide)),main:has(#t-video.on){overflow:hidden;pa
 #ph-ed:not(.hide){flex:1;min-height:0;display:flex;flex-direction:column}
 .tools{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:calc(104px + env(safe-area-inset-bottom))}
 #ph-ed .bar,#t-video .bar{flex:none;flex-wrap:nowrap;overflow-x:auto}
+
+/* Part 8: header, login, glossy, tool tabs */
+header{height:auto;padding:calc(env(safe-area-inset-top) + 6px) 0 8px;display:flex;justify-content:center;background:linear-gradient(180deg,#fff,#E8F7EC);border-radius:0 0 28px 28px;box-shadow:inset 0 -1px 0 rgba(255,255,255,.9),0 8px 24px rgba(21,128,61,.18)}
+html[data-mode=dark] header{background:linear-gradient(180deg,#16301F,#0B1A12)}
+@media(prefers-color-scheme:dark){html[data-mode=auto] header{background:linear-gradient(180deg,#16301F,#0B1A12)}}
+header .bn{height:64px;width:auto;max-width:calc(100% - 64px);object-fit:contain;border-radius:18px}
+header .ib{bottom:auto;top:calc(env(safe-area-inset-top) + 18px)}
+#login{background:linear-gradient(160deg,#F3FBF5 0%,#D9F3E1 55%,#B7E8C6 100%)}
+html[data-mode=dark] #login{background:linear-gradient(160deg,#06110B,#0A2014 60%,#0E3320)}
+@media(prefers-color-scheme:dark){html[data-mode=auto] #login{background:linear-gradient(160deg,#06110B,#0A2014 60%,#0E3320)}}
+.blob.b1{background:#22C55E;opacity:.4}.blob.b2{background:#86EFAC;opacity:.55}
+.fl{border-color:rgba(21,128,61,.3)}
+.lcard{max-width:360px;padding:34px 26px;border:1px solid rgba(255,255,255,.85)}
+.lcard img{width:104px;height:104px;border-radius:26px}
+:root{--gl:.65}html[data-mode=dark]{--gl:.07}@media(prefers-color-scheme:dark){html[data-mode=auto]{--gl:.07}}
+.card,.sheet,.lcard,.stage{background-image:linear-gradient(180deg,rgba(255,255,255,var(--gl)),rgba(255,255,255,0) 55%);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 10px 28px rgba(21,128,61,.10)}
+.ib,.seg button{background-image:linear-gradient(180deg,rgba(255,255,255,var(--gl)),rgba(255,255,255,0));box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 3px 8px rgba(0,0,0,.07)}
+html[data-pack][data-mode] .btn,html[data-pack][data-mode] .hero,html[data-pack][data-mode] nav button.on,html[data-pack][data-mode] .seg button.on{background-image:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0) 52%),var(--grad);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -2px 6px rgba(0,0,0,.12),0 8px 18px rgba(21,128,61,.3)}
+nav{background-image:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),var(--sh)}
+.chips{flex:none;flex-wrap:nowrap;overflow-x:auto;margin-bottom:10px;padding-bottom:2px}.chips button{flex:none}
+#t-video .chips{margin:8px 0 8px}
 </style></head>
 <body>
 <section id="login">
@@ -116,22 +137,24 @@ main:has(#t-photo.on #ph-ed:not(.hide)),main:has(#t-video.on){overflow:hidden;pa
 </section>
 
 <div id="app" class="hide">
-  <header><span class="sr">SW Editor</span>
+  <header><img class="bn" src="banner.png" alt="SW Editor">
     <button class="ib" id="menu" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   </header>
   <main>
     <div class="tab on" id="t-photo">
       <div id="ph-empty"><div class="hero"><h2>Photo Edit</h2><p>Pick a photo from your gallery to start editing.</p></div>
-        <label class="btn" style="display:block;text-align:center;cursor:pointer">Choose photo<input id="file" type="file" accept="image/*" hidden></label></div>
+        <label class="btn" style="display:block;text-align:center;cursor:pointer">Import photo<input id="file" type="file" accept="image/*" hidden></label></div>
       <div id="ph-ed" class="hide">
         <div class="bar"><button class="ib" id="un">Undo</button><button class="ib" id="re">Redo</button><button class="ib" id="bf">Before</button><button class="ib" id="gd">Grid</button><button class="ib" id="zm">Zoom: on</button><button class="ib" id="nw">New photo</button></div>
         <div class="stage" id="stage"><canvas id="cv"></canvas><div class="grid hide" id="grid"></div></div>
-        <div class="seg" id="ptabs" style="margin:12px 0;flex:none"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="flt">Filters</button><button data-p="skin">Skin</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
+        <div class="seg" id="ptabs" style="margin:12px 0;flex:none"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="flt">Filters</button><button data-p="skin">Skin</button><button data-p="fx">Effects</button><button data-p="tx">Text</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
         <div class="tools"><div class="card pp" id="p-crop"><div class="seg" id="ratios"><button data-r="1">1:1</button><button data-r="0.8">4:5</button><button data-r="0.5625">9:16</button><button data-r="1.7778">16:9</button><button data-r="1.3333">4:3</button></div>
           <div class="seg" style="margin-top:10px"><button id="rl">Rotate left</button><button id="rr">Rotate right</button><button id="fh">Flip H</button><button id="fv">Flip V</button></div></div>
-        <div class="card pp hide" id="p-adj"><div class="sl"><span>Brightness</span><input type="range" id="a-b" min="-100" max="100" value="0"></div><div class="sl"><span>Contrast</span><input type="range" id="a-c" min="-100" max="100" value="0"></div><div class="sl"><span>Saturation</span><input type="range" id="a-s" min="-100" max="100" value="0"></div><div class="sl"><span>Sharpness</span><input type="range" id="a-sh" min="0" max="100" value="0"></div><button class="ib" id="a-rs" style="width:auto;padding:0 14px">Reset</button></div>
+        <div class="card pp hide" id="p-adj"><div class="sl"><span>Brightness</span><input type="range" id="a-b" min="-100" max="100" value="0"></div><div class="sl"><span>Contrast</span><input type="range" id="a-c" min="-100" max="100" value="0"></div><div class="sl"><span>Saturation</span><input type="range" id="a-s" min="-100" max="100" value="0"></div><div class="sl"><span>Sharpness</span><input type="range" id="a-sh" min="0" max="100" value="0"></div><div class="sl"><span>Highlights</span><input type="range" id="a-hl" min="-100" max="100" value="0"></div><div class="sl"><span>Shadows</span><input type="range" id="a-sd" min="-100" max="100" value="0"></div><div class="sl"><span>Warmth (cool / warm)</span><input type="range" id="a-wm" min="-100" max="100" value="0"></div><button class="ib" id="a-rs" style="width:auto;padding:0 14px">Reset</button></div>
         <div class="card pp hide" id="p-flt"></div>
         <div class="card pp hide" id="p-skin"></div>
+        <div class="card pp hide" id="p-fx"></div>
+        <div class="card pp hide" id="p-tx"><div class="sl" data-g="Text"><span>Text (tap the photo to place it)</span><input id="t-tt" placeholder="Type your text" style="padding:12px;border-radius:16px;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin-bottom:8px"><input type="range" id="t-tz" min="10" max="100" value="50"></div><div class="sl" data-g="Sticker"><span>Sticker (tap the photo to place it)</span><div class="seg" id="t-em"><button>😀</button><button>😍</button><button>😎</button><button>🔥</button><button>❤️</button><button>⭐</button><button>🎉</button><button>🌸</button><button>👍</button><button>✨</button></div><input type="range" id="t-ss" min="10" max="100" value="40" style="margin-top:10px"></div><button class="ib" id="t-rs" style="width:auto;padding:0 14px">Clear text and sticker</button></div>
         <div class="card pp hide" id="p-rs"><div class="sl"><span id="rs-l">Size 100%</span><input type="range" id="rs-r" min="20" max="100" value="100"></div><button class="btn" id="rs-go">Apply resize</button></div>
         <div class="card pp hide" id="p-ex"><div class="lab">Format</div><div class="seg" id="fm"><button data-v="jpeg" class="on">JPG</button><button data-v="png">PNG</button></div>
           <div class="lab" style="margin-top:10px">Quality</div><div class="seg" id="ql"><button data-v=".6">Low</button><button data-v=".8">Medium</button><button data-v=".95" class="on">High</button></div>
@@ -142,17 +165,26 @@ main:has(#t-photo.on #ph-ed:not(.hide)),main:has(#t-video.on){overflow:hidden;pa
       <div class="stage" style="margin-top:12px"><canvas id="vc" width="640" height="360" style="max-width:100%;max-height:42vh"></canvas></div>
       <div class="bar" style="margin-top:10px"><button class="ib" id="vplay">Play</button><button class="ib" id="vsplit">Split</button><button class="ib" id="vdel">Delete</button><button class="ib" id="vbf">Before</button><button class="ib" id="vl">Left</button><button class="ib" id="vr">Right</button></div>
       <div class="seg" id="vclips" style="margin-bottom:10px;flex-wrap:nowrap;overflow-x:auto;flex:none"></div>
-      <div class="tools"><div class="card"><div class="sl"><span id="l-in">Trim start</span><input type="range" id="vin" min="0" max="1" step="0.1" value="0"></div><div class="sl"><span id="l-out">Trim end</span><input type="range" id="vout" min="0" max="1" step="0.1" value="1"></div><div class="sl"><span id="l-sk">Split position</span><input type="range" id="vseek" min="0" max="1" step="0.1" value="0"></div>
-        <div class="lab">Speed</div><div class="seg" id="vsp"><button data-v="0.5">0.5x</button><button data-v="1" class="on">1x</button><button data-v="1.5">1.5x</button><button data-v="2">2x</button></div>
-        <div class="sl" style="margin-top:10px"><span>Clip volume</span><input type="range" id="vvol" min="0" max="1" step="0.05" value="1"></div></div>
-      <div class="card"><div class="lab">Aspect ratio</div><div class="seg" id="vas"><button data-v="0" class="on">Original</button><button data-v="0.5625">9:16</button><button data-v="1">1:1</button><button data-v="1.7778">16:9</button></div>
-        <div class="lab" style="margin-top:10px">Filter</div><div class="seg" id="vfl"><button data-v="" class="on">None</button><button data-v="bw">B&amp;W</button><button data-v="warm">Warm</button><button data-v="cool">Cool</button><button data-v="vivid">Vivid</button><button data-v="fade">Fade</button></div>
-        <div class="lab" style="margin-top:10px">Text</div><input id="vtx" placeholder="Type text for the video" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)">
-        <div class="seg" id="vtp" style="margin-top:8px"><button data-v="t">Top</button><button data-v="m">Middle</button><button data-v="b" class="on">Bottom</button></div>
-        <div class="lab" style="margin-top:10px">Music</div><label class="ib" style="width:auto;padding:0 14px;display:inline-grid;cursor:pointer" id="vmus">Choose music<input id="vmf" type="file" accept="audio/*" hidden></label>
-        <div class="sl" style="margin-top:8px"><span>Music volume</span><input type="range" id="vmv" min="0" max="1" step="0.05" value="0.7"></div></div>
-      <div class="card"><div class="lab">Export quality</div><div class="seg" id="vrs"><button data-v="720" class="on">720p</button><button data-v="1080">1080p</button></div>
-        <button class="btn" id="vex" style="margin-top:12px">Export video</button><p id="vst" style="color:var(--mute);font-size:13px;margin-top:8px">Export runs in real time and takes as long as the video. Keep the screen on and don't close the app.</p></div></div>
+      <div class="tools" id="vtools">
+<div class="card vg" data-g="Trim"><div class="sl"><span id="l-in">Trim start</span><input type="range" id="vin" min="0" max="1" step="0.1" value="0"></div><div class="sl"><span id="l-out">Trim end</span><input type="range" id="vout" min="0" max="1" step="0.1" value="1"></div></div>
+<div class="card vg" data-g="Split"><div class="sl"><span id="l-sk">Split position</span><input type="range" id="vseek" min="0" max="1" step="0.1" value="0"></div></div>
+<div class="card vg" data-g="Speed"><div class="seg" id="vsp"><button data-v="0.5">0.5x</button><button data-v="1" class="on">1x</button><button data-v="1.5">1.5x</button><button data-v="2">2x</button></div></div>
+<div class="card vg" data-g="Volume"><div class="sl"><span>Clip volume</span><input type="range" id="vvol" min="0" max="1" step="0.05" value="1"></div></div>
+<div class="card vg" data-g="Aspect"><div class="seg" id="vas"><button data-v="0" class="on">Original</button><button data-v="0.5625">9:16</button><button data-v="1">1:1</button><button data-v="1.7778">16:9</button></div></div>
+<div class="card vg" data-g="Filter"><div class="seg" id="vfl"><button data-v="" class="on">None</button><button data-v="bw">B&amp;W</button><button data-v="warm">Warm</button><button data-v="cool">Cool</button><button data-v="vivid">Vivid</button><button data-v="fade">Fade</button></div></div>
+<div class="card vg" data-g="Brightness"><div class="sl"><span>Brightness</span><input type="range" id="vab" min="-60" max="60" value="0"></div></div>
+<div class="card vg" data-g="Contrast"><div class="sl"><span>Contrast</span><input type="range" id="vac" min="-60" max="60" value="0"></div></div>
+<div class="card vg" data-g="Saturation"><div class="sl"><span>Saturation</span><input type="range" id="vasat" min="-80" max="80" value="0"></div></div>
+<div class="card vg" data-g="Fade in"><div class="sl"><span>Fade in (seconds)</span><input type="range" id="vfi" min="0" max="3" step="0.5" value="0"></div></div>
+<div class="card vg" data-g="Fade out"><div class="sl"><span>Fade out (seconds)</span><input type="range" id="vfo" min="0" max="3" step="0.5" value="0"></div></div>
+<div class="card vg" data-g="Rotate / Flip"><div class="seg"><button id="vrot">Rotate 90</button><button id="vfh">Flip H</button><button id="vfv">Flip V</button></div></div>
+<div class="card vg" data-g="Reverse"><button class="ib" id="vrev" style="width:auto;padding:0 14px">Reverse this clip: Off</button></div>
+<div class="card vg" data-g="Text"><input id="vtx" placeholder="Type text for the video" style="width:100%;padding:12px;border-radius:18px;border:1px solid var(--line);background:var(--bg);color:var(--ink)"><div class="seg" id="vtp" style="margin-top:8px"><button data-v="t">Top</button><button data-v="m">Middle</button><button data-v="b" class="on">Bottom</button></div></div>
+<div class="card vg" data-g="Text start"><div class="sl"><span>Text shows from (seconds)</span><input type="range" id="vts" min="0" max="10" step="0.5" value="0"></div></div>
+<div class="card vg" data-g="Text end"><div class="sl"><span>Text hides at (seconds, 0 = until the end)</span><input type="range" id="vte" min="0" max="10" step="0.5" value="0"></div></div>
+<div class="card vg" data-g="Music"><label class="ib" style="width:auto;padding:0 14px;display:inline-grid;cursor:pointer" id="vmus">Choose music<input id="vmf" type="file" accept="audio/*" hidden></label><div class="sl" style="margin-top:8px"><span>Music volume</span><input type="range" id="vmv" min="0" max="1" step="0.05" value="0.7"></div></div>
+<div class="card vg" data-g="Export"><div class="seg" id="vrs"><button data-v="720" class="on">720p</button><button data-v="1080">1080p</button></div><button class="btn" id="vex" style="margin-top:12px">Export video</button><p id="vst" style="color:var(--mute);font-size:13px;margin-top:8px">Export runs in real time and takes as long as the video. Keep the screen on and don't close the app.</p></div>
+</div>
     </div>
     <div class="tab" id="t-proj">
       <input id="pq" placeholder="Search projects" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-bottom:10px">
@@ -219,8 +251,9 @@ function tour(){const P=[["🖼️","Photo edit","Crop, filters, retouch and tex
 
 // ---- photo editor (Part 2)
 const cv=$("#cv"),cx=cv.getContext("2d");
-const DEF=()=>({b:0,c:0,s:0,sh:0,f:'',fs:100,sm:0,gl:0,tn:0,ev:0,wr:0,sy:0,tp:0,wh:0,bd:0,fr:0,fx:.5,fy:.4});
-let base=null,pv=null,adj=DEF(),hist=[],hi=-1,fmt="jpeg",qual=.95,ct=false,ch=false,skinOpen=false,zm=true;
+const ADJ=[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"],["hl","a-hl"],["sd","a-sd"],["wm","a-wm"]],FX=[["vg","Vignette"],["gr","Grain / film"],["bb","Background blur (outside the face, tap the face first)"]];
+const DEF=()=>({b:0,c:0,s:0,sh:0,f:'',fs:100,sm:0,gl:0,tn:0,ev:0,wr:0,sy:0,tp:0,wh:0,bd:0,fr:0,fx:.5,fy:.4,hl:0,sd:0,wm:0,vg:0,gr:0,bb:0,tw:0,eb:0,tt:"",tz:50,tx:.5,ty:.85,st:"",ss:40,sx:.5,sy:.5});
+let base=null,pv=null,adj=DEF(),hist=[],hi=-1,fmt="jpeg",qual=.95,ct=false,ch=false,skinOpen=false,zm=true,curP="crop",txg=0;
 const mk=(w,h)=>{const c=document.createElement("canvas");c.width=Math.max(1,Math.round(w));c.height=Math.max(1,Math.round(h));return c};
 const fit=(i,m)=>{const k=Math.min(1,m/Math.max(i.width,i.height)),c=mk(i.width*k,i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);return c};
 const FL={"Soft":{g:"Portrait",b:6,c:-8,s:-5,o:[8,2,-4]},"Warm glow":{g:"Portrait",b:8,c:-4,s:8,o:[14,4,-8]},"Rosy":{g:"Portrait",b:5,c:-6,s:4,o:[10,-2,4]},
@@ -232,7 +265,24 @@ function bl(s,w,h,r,ch){const T=new s.constructor(s.length),O=new s.constructor(
  for(let x=0;x<w;x++)for(let c=0;c<ch;c++){let a=0;for(let y=-r;y<=r;y++)a+=T[(cl(y,h-1)*w+x)*ch+c];for(let y=0;y<h;y++){O[(y*w+x)*ch+c]=a/n;a+=T[(cl(y+r+1,h-1)*w+x)*ch+c]-T[(cl(y-r,h-1)*w+x)*ch+c]}}
  return O}
 const ed=(r,g,b,L,i)=>{const q=Math.abs(r-L[i])+Math.abs(g-L[i+1])+Math.abs(b-L[i+2]);return q>=70?.15:1-.85*q/70};
-function proc(src,a){const w=src.width,h=src.height,o=mk(w,h),x=o.getContext("2d");x.drawImage(src,0,0);
+function post(o,a){const w=o.width,h=o.height,x=o.getContext("2d");
+ if(a.hl||a.sd||a.wm||a.vg||a.gr||a.bb||(a.fr&&(a.tw||a.eb))){const id=x.getImageData(0,0,w,h),d=id.data,bs=a.bb?bl(d,w,h,Math.max(3,Math.round(w/28)),4):null,cx0=a.fx*w,cy0=a.fy*h,fr=(a.fr||26)/100*Math.min(w,h);
+  for(let p=0;p<w*h;p++){const i=p*4,xx=p%w,yy=(p/w)|0;let r=d[i],g=d[i+1],b=d[i+2];const l=.299*r+.587*g+.114*b;
+   if(a.bb){const R=fr*2.4,dd=Math.hypot((xx-cx0)/R,(yy-cy0)/(R*2.2));if(dd>1){const t=Math.min(1,(dd-1)/.6)*a.bb/100;r+=(bs[i]-r)*t;g+=(bs[i+1]-g)*t;b+=(bs[i+2]-b)*t}}
+   if(a.wm){r+=a.wm*.3;b-=a.wm*.3}
+   if(a.hl&&l>128){const k=a.hl*.35*(l-128)/127;r+=k;g+=k;b+=k}
+   if(a.sd&&l<128){const k=a.sd*.35*(128-l)/128;r+=k;g+=k;b+=k}
+   if(a.fr&&(a.tw||a.eb)&&Math.hypot(xx-cx0,yy-cy0)<fr&&l>140&&Math.max(r,g,b)-Math.min(r,g,b)<60){if(yy>cy0){const k=a.tw/100;r+=(255-r)*k*.3;g+=(255-g)*k*.3;b+=(255-b)*k*.45+k*18}else{const k=a.eb/100;r+=k*30;g+=k*30;b+=k*30}}
+   if(a.vg){const dd=Math.hypot((xx-w/2)/(w/2),(yy-h/2)/(h/2)),k=Math.max(0,dd-.45)/.95,f=1-Math.min(1,k*k*1.6)*a.vg/100*.9;r*=f;g*=f;b*=f}
+   if(a.gr){const n=(((p*1103515245+12345)>>>8)&255)/255-.5,k=n*a.gr*.6;r+=k;g+=k;b+=k}
+   d[i]=r;d[i+1]=g;d[i+2]=b}
+  x.putImageData(id,0,0)}
+ x.textAlign="center";x.textBaseline="middle";const m=Math.min(w,h);
+ if(a.st){x.font=`${a.ss/100*m*.5}px serif`;x.fillText(a.st,a.sx*w,a.sy*h)}
+ if(a.tt){x.font=`700 ${a.tz/100*m*.2}px Sora,Inter,sans-serif`;x.lineWidth=m*.012;x.strokeStyle="#000";x.fillStyle="#fff";x.strokeText(a.tt,a.tx*w,a.ty*h,w*.92);x.fillText(a.tt,a.tx*w,a.ty*h,w*.92)}
+ return o}
+const proc=(s0,a)=>post(proc0(s0,a),a);
+function proc0(src,a){const w=src.width,h=src.height,o=mk(w,h),x=o.getContext("2d");x.drawImage(src,0,0);
  const F=FL[a.f],k=a.fs/100,sk=a.sm||a.gl||a.tn||a.ev||a.wr||a.sy||a.tp||a.wh;
  if(!a.b&&!a.c&&!a.s&&!a.sh&&!F&&!sk)return o;
  const id=x.getImageData(0,0,w,h),d=id.data;let B=a.b*2.55,C=1+a.c/100,S=1+a.s/100,of=[0,0,0];
@@ -259,7 +309,7 @@ const render=()=>{const o=(ct||ch)?pv:proc(pv,adj);cv.width=o.width;cv.height=o.
  if(skinOpen&&adj.fr&&zm){cv.style.transformOrigin=adj.fx*100+"% "+adj.fy*100+"%";cv.style.transform="scale(1.7)"}else cv.style.transform=""};
 function upd(){$("#un").disabled=hi<=0;$("#re").disabled=hi>=hist.length-1}
 function commit(){clearTimeout(saveT);saveT=setTimeout(saveP,3000);hist=hist.slice(0,hi+1);hist.push({c:base,a:{...adj}});if(hist.length>12)hist.shift();hi=hist.length-1;upd()}
-function sync(){[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"]].forEach(([k,id])=>$("#"+id).value=adj[k]);SK.forEach(([k])=>$("#k-"+k).value=adj[k]);$("#fs").value=adj.fs;markF()}
+function sync(){ADJ.forEach(([k,id])=>$("#"+id).value=adj[k]);SK.forEach(([k])=>$("#k-"+k).value=adj[k]);$("#fs").value=adj.fs;FX.forEach(([k])=>$("#x-"+k).value=adj[k]);$("#t-tt").value=adj.tt||"";$("#t-tz").value=adj.tz;$("#t-ss").value=adj.ss;markF()}
 function setBase(c,push=true){base=c;pv=fit(c,1100);render();if(push)commit()}
 function restore(i){hi=i;base=hist[i].c;adj={...hist[i].a};pv=fit(base,1100);sync();render();upd()}
 $("#un").onclick=()=>{if(hi>0){buzz();restore(hi-1)}};$("#re").onclick=()=>{if(hi<hist.length-1){buzz();restore(hi+1)}};
@@ -271,7 +321,7 @@ $("#rr").onclick=()=>geo(b=>{const n=mk(b.height,b.width),x=n.getContext("2d");x
 $("#fh").onclick=()=>geo(b=>{const n=mk(b.width,b.height),x=n.getContext("2d");x.translate(b.width,0);x.scale(-1,1);x.drawImage(b,0,0);return n});
 $("#fv").onclick=()=>geo(b=>{const n=mk(b.width,b.height),x=n.getContext("2d");x.translate(0,b.height);x.scale(1,-1);x.drawImage(b,0,0);return n});
 $("#ratios").onclick=e=>{const r=parseFloat(e.target.dataset.r);if(!r)return;geo(b=>{let w=b.width,h=b.height;if(w/h>r)w=h*r;else h=w/r;const n=mk(w,h);n.getContext("2d").drawImage(b,(b.width-n.width)/2,(b.height-n.height)/2,n.width,n.height,0,0,n.width,n.height);return n})};
-[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"]].forEach(([k,id])=>{const el=$("#"+id);let q=0;
+ADJ.forEach(([k,id])=>{const el=$("#"+id);let q=0;
  el.oninput=()=>{adj[k]=+el.value;if(!q)q=requestAnimationFrame(()=>{q=0;render()})};el.onchange=()=>{adj[k]=+el.value;render();commit()}});
 $("#a-rs").onclick=()=>{adj=DEF();sync();render();commit()};
 $("#rs-r").oninput=e=>$("#rs-l").textContent="Size "+e.target.value+"%";
@@ -279,10 +329,10 @@ $("#rs-go").onclick=()=>{const p=$("#rs-r").value/100;if(p<1)geo(b=>{const n=mk(
 
 $("#gd").onclick=()=>$("#grid").classList.toggle("hide");$("#zm").onclick=e=>{zm=!zm;e.target.textContent="Zoom: "+(zm?"on":"off");render()};
 $("#bf").onclick=e=>{ct=!ct;e.target.textContent=ct?"After":"Before";render()};
-cv.onpointerdown=()=>{if(!skinOpen){ch=true;render()}};
+cv.onpointerdown=()=>{if(!skinOpen&&curP!=="tx"){ch=true;render()}};
 cv.onpointerup=cv.onpointercancel=cv.onpointerleave=()=>{if(ch){ch=false;render()}};
-cv.onclick=e=>{if(!skinOpen||ct)return;const r=cv.getBoundingClientRect();adj.fx=(e.clientX-r.left)/r.width;adj.fy=(e.clientY-r.top)/r.height;if(!adj.fr)adj.fr=22;$("#k-fr").value=adj.fr;buzz();render();commit()};
-$("#ptabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;buzz();skinOpen=p==="skin";render();document.querySelectorAll("#ptabs button").forEach(b=>b.classList.toggle("on",b===e.target));document.querySelectorAll(".pp").forEach(x=>x.classList.toggle("hide",x.id!=="p-"+p))};
+cv.onclick=e=>{if(ct)return;const r=cv.getBoundingClientRect();if(curP==="tx"){adj[txg?"sx":"tx"]=(e.clientX-r.left)/r.width;adj[txg?"sy":"ty"]=(e.clientY-r.top)/r.height;buzz();render();commit();return}if(!skinOpen)return;adj.fx=(e.clientX-r.left)/r.width;adj.fy=(e.clientY-r.top)/r.height;if(!adj.fr)adj.fr=22;$("#k-fr").value=adj.fr;buzz();render();commit()};
+$("#ptabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;buzz();skinOpen=p==="skin";curP=p;render();document.querySelectorAll("#ptabs button").forEach(b=>b.classList.toggle("on",b===e.target));document.querySelectorAll(".pp").forEach(x=>x.classList.toggle("hide",x.id!=="p-"+p))};
 const segPick=(id,fn)=>$(id).onclick=e=>{if(!e.target.dataset.v)return;buzz();document.querySelectorAll(id+" button").forEach(b=>b.classList.toggle("on",b===e.target));fn(e.target.dataset.v)};
 segPick("#fm",v=>fmt=v);segPick("#ql",v=>qual=+v);
 $("#ex-go").onclick=()=>{buzz();const o=proc(base,adj),ext=fmt==="png"?"png":"jpg";o.toBlob(bl=>{const f=new File([bl],"SW-Editor."+ext,{type:bl.type});
@@ -290,8 +340,8 @@ $("#ex-go").onclick=()=>{buzz();const o=proc(base,adj),ext=fmt==="png"?"png":"jp
  else{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download=f.name;a.click()}},"image/"+fmt,qual)};
 
 // ---- filters + skin (Part 3)
-const SK=[["sm","Skin smoothing"],["gl","Glow"],["tn","Skin tone (cool / fair to warm)"],["ev","Even-out"],["wr","Wrinkle smooth"],["sy","Shine remove"],["tp","Tan remove + brighten"],["wh","Whiten / fair skin"],["fr","Face size (tap the face first)"],["bd","Body skin (neck, arms, legs)"]];
-$("#p-skin").innerHTML=SK.map(([k,n])=>`<div class="sl"><span>${n}</span><input type="range" id="k-${k}" min="${k==="tn"?-100:0}" max="100" value="0"></div>`).join("")+'<button class="ib" id="k-rs" style="width:auto;padding:0 14px">Reset skin</button><p style="color:var(--mute);font-size:12px;margin-top:8px">Skin is detected by colour. Tap the face on the photo to select it. Face-point tools (teeth, eyes, makeup) come later.</p>';
+const SK=[["sm","Skin smoothing"],["gl","Glow"],["tn","Skin tone (cool / fair to warm)"],["ev","Even-out"],["wr","Wrinkle smooth"],["sy","Shine remove"],["tp","Tan remove + brighten"],["wh","Whiten / fair skin"],["fr","Face size (tap the face first)"],["bd","Body skin (neck, arms, legs)"],["tw","Teeth whitening (tap the face first)"],["eb","Eye brighten (tap the face first)"]];
+$("#p-skin").innerHTML=SK.map(([k,n])=>`<div class="sl"><span>${n}</span><input type="range" id="k-${k}" min="${k==="tn"?-100:0}" max="100" value="0"></div>`).join("")+'<button class="ib" id="k-rs" style="width:auto;padding:0 14px">Reset skin</button><p style="color:var(--mute);font-size:12px;margin-top:8px">Skin is detected by colour. Tap the face on the photo to select it. Teeth and eye tools work after you tap the face.</p>';
 SK.forEach(([k])=>{const el=$("#k-"+k);let q=0;el.oninput=()=>{adj[k]=+el.value;if(!q)q=requestAnimationFrame(()=>{q=0;render()})};el.onchange=()=>{adj[k]=+el.value;render();commit()}});
 $("#k-rs").onclick=()=>{SK.forEach(([k])=>adj[k]=0);sync();render();commit()};
 const favs=()=>{try{return JSON.parse(ls.get("favs")||"[]")}catch(e){return[]}};
@@ -314,17 +364,22 @@ drawF();
 const vc=$("#vc"),vx=vc.getContext("2d"),pe=document.createElement("video");pe.muted=true;pe.playsInline=true;
 let vcmp=false,VC=[],vi=-1,running=false,asp="0",vfil="",vtxt="",vpos="b",mus=null,mvol=.7,vres=720;
 const cur=()=>VC[vi],st=t=>$("#vst").textContent=t;
+let tl=0,TOT=0,vrot=0,vfh=false,vfv=false,vfi=0,vfo=0,vts=0,vte=0,vadj={b:0,c:0,s:0};
 function dims(){const r=asp==="0"?(VC[0]?VC[0].w/VC[0].h:16/9):+asp;let W,H;if(r>=1){H=vres;W=H*r}else{W=vres;H=W/r}return[Math.round(W/2)*2,Math.round(H/2)*2]}
 function vDraw(v,W,H){if(vc.width!==W||vc.height!==H){vc.width=W;vc.height=H}
- vx.fillStyle="#000";vx.fillRect(0,0,W,H);const k=Math.max(W/v.videoWidth,H/v.videoHeight),w=v.videoWidth*k,h=v.videoHeight*k;vx.drawImage(v,(W-w)/2,(H-h)/2,w,h);
+ vx.fillStyle="#000";vx.fillRect(0,0,W,H);const od=vcmp?0:vrot%2,k=Math.max((od?H:W)/v.videoWidth,(od?W:H)/v.videoHeight),w=v.videoWidth*k,h=v.videoHeight*k,hf="filter"in vx;
+ if(!vcmp&&hf&&(vadj.b||vadj.c||vadj.s))vx.filter=`brightness(${1+vadj.b/100}) contrast(${1+vadj.c/100}) saturate(${1+vadj.s/100})`;
+ vx.save();vx.translate(W/2,H/2);if(!vcmp){vx.rotate(vrot*Math.PI/2);vx.scale(vfh?-1:1,vfv?-1:1)}vx.drawImage(v,-w/2,-h/2,w,h);vx.restore();if(hf)vx.filter="none";
  const ov=(m,c)=>{vx.globalCompositeOperation=m;vx.fillStyle=c;vx.fillRect(0,0,W,H);vx.globalCompositeOperation="source-over"};
+ if(!vcmp&&!("filter"in vx)&&vadj.b)ov("source-over",vadj.b>0?`rgba(255,255,255,${vadj.b/250})`:`rgba(0,0,0,${-vadj.b/250})`);
  if(vcmp){}else if(vfil==="bw")ov("saturation","#808080");else if(vfil==="warm")ov("soft-light","rgba(255,150,40,.4)");else if(vfil==="cool")ov("soft-light","rgba(40,120,255,.4)");else if(vfil==="vivid")ov("saturation","rgba(255,0,0,.4)");else if(vfil==="fade")ov("source-over","rgba(255,255,255,.14)");
- if(vtxt){vx.font=`700 ${Math.round(H*.06)}px Sora,Inter,sans-serif`;vx.textAlign="center";vx.textBaseline="middle";vx.lineWidth=H*.012;vx.strokeStyle="#000";vx.fillStyle="#fff";const y=vpos==="t"?H*.12:vpos==="m"?H*.5:H*.88;vx.strokeText(vtxt,W/2,y,W*.9);vx.fillText(vtxt,W/2,y,W*.9)}}
+ if(vtxt&&!vcmp&&(!running||tl>=vts&&(vte<=0||tl<=vte))){vx.font=`700 ${Math.round(H*.06)}px Sora,Inter,sans-serif`;vx.textAlign="center";vx.textBaseline="middle";vx.lineWidth=H*.012;vx.strokeStyle="#000";vx.fillStyle="#fff";const y=vpos==="t"?H*.12:vpos==="m"?H*.5:H*.88;vx.strokeText(vtxt,W/2,y,W*.9);vx.fillText(vtxt,W/2,y,W*.9)}
+ if(running&&!vcmp&&TOT>0){let al=0;if(vfi>0&&tl<vfi)al=1-tl/vfi;if(vfo>0&&TOT-tl<vfo)al=Math.max(al,1-(TOT-tl)/vfo);if(al>0){vx.fillStyle=`rgba(0,0,0,${al})`;vx.fillRect(0,0,W,H)}}}
 function show(){const c=cur();if(!c||running)return;const[W,H]=dims();if(pe.dataset.u!==c.url){pe.dataset.u=c.url;pe.src=c.url}
  pe.onseeked=()=>vDraw(pe,W,H);pe.currentTime=c.cur??c.in}
-function rClips(){$("#vclips").innerHTML=VC.map((c,i)=>`<button data-i="${i}" class="${i===vi?"on":""}">Clip ${i+1} (${(c.out-c.in).toFixed(1)}s)</button>`).join("")}
+function rClips(){const tt=VC.reduce((q,c)=>q+(c.out-c.in)/c.sp,0);$("#vts").max=$("#vte").max=Math.max(1,Math.ceil(tt));$("#vclips").innerHTML=VC.map((c,i)=>`<button data-i="${i}" class="${i===vi?"on":""}">Clip ${i+1} (${(c.out-c.in).toFixed(1)}s)</button>`).join("")}
 function rCtl(){const c=cur();if(!c)return;for(const[id,v]of[["vin",c.in],["vout",c.out],["vseek",c.cur??c.in]]){const e=$("#"+id);e.max=c.dur;e.value=v}
- $("#vvol").value=c.vol;document.querySelectorAll("#vsp button").forEach(b=>b.classList.toggle("on",+b.dataset.v===c.sp));lab()}
+ $("#vvol").value=c.vol;$("#vrev").textContent="Reverse this clip: "+(c.rev?"On":"Off");document.querySelectorAll("#vsp button").forEach(b=>b.classList.toggle("on",+b.dataset.v===c.sp));lab()}
 function lab(){const c=cur();if(!c)return;$("#l-in").textContent="Trim start "+c.in.toFixed(1)+"s";$("#l-out").textContent="Trim end "+c.out.toFixed(1)+"s";$("#l-sk").textContent="Split position "+(c.cur??c.in).toFixed(1)+"s"}
 $("#vfile").onchange=async e=>{for(const f of e.target.files){const url=URL.createObjectURL(f);await new Promise(r=>{const v=document.createElement("video");v.preload="metadata";v.onloadedmetadata=()=>{VC.push({url,dur:v.duration,in:0,out:v.duration,sp:1,vol:1,w:v.videoWidth,h:v.videoHeight});r()};v.onerror=r;v.src=url})}
  e.target.value="";if(vi<0)vi=0;rClips();rCtl();show()};
@@ -347,9 +402,11 @@ async function run(rec){if(!VC.length||running)return;running=true;vcmp=false;$(
  if(mus){ma=new Audio(mus);ma.loop=true;wire(ma,mvol)}
  if(rec){const mt=["video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9","video/webm"].find(t=>MediaRecorder.isTypeSupported(t));mr=new MediaRecorder(new MediaStream([...vc.captureStream(30).getVideoTracks(),...dst.stream.getAudioTracks()]),{mimeType:mt,videoBitsPerSecond:vres>=1080?8e6:5e6});mr.ondataavailable=e=>e.data.size&&ch.push(e.data);mr.start(500);st("Exporting... don't close the app.")}
  $("#vplay").textContent="Stop";if(ma)ma.play();
- for(const c of VC){if(!running)break;const v=document.createElement("video");v.playsInline=true;v.src=c.url;await new Promise(r=>v.onloadedmetadata=r);wire(v,c.vol);
-  v.currentTime=c.in;await new Promise(r=>v.onseeked=r);v.playbackRate=c.sp;await v.play();
-  await new Promise(res=>{const f=()=>{if(!running||v.currentTime>=c.out||v.ended){v.pause();return res()}vDraw(v,W,H);requestAnimationFrame(f)};f()})}
+ TOT=VC.reduce((q,c)=>q+(c.out-c.in)/c.sp,0);tl=0;let acc=0;for(const c of VC){if(!running)break;const v=document.createElement("video");v.playsInline=true;v.src=c.url;await new Promise(r=>v.onloadedmetadata=r);wire(v,c.vol);
+  if(c.rev){v.muted=true;let t=c.out-.05;while(running&&t>c.in){v.currentTime=t;await new Promise(r=>v.onseeked=r);tl=acc+(c.out-t)/c.sp;vDraw(v,W,H);await new Promise(r=>setTimeout(r,33));t-=c.sp/30}}
+  else{v.currentTime=c.in;await new Promise(r=>v.onseeked=r);v.playbackRate=c.sp;await v.play();
+  await new Promise(res=>{const f=()=>{if(!running||v.currentTime>=c.out||v.ended){v.pause();return res()}tl=acc+(v.currentTime-c.in)/c.sp;vDraw(v,W,H);requestAnimationFrame(f)};f()})}
+  acc+=(c.out-c.in)/c.sp}
  if(ma)ma.pause();const done=running;running=false;$("#vplay").textContent="Play";
  if(rec&&mr){await new Promise(r=>{mr.onstop=r;mr.stop()});if(done){const bl=new Blob(ch,{type:mr.mimeType}),f=new File([bl],"SW-Editor."+(bl.type.includes("mp4")?"mp4":"webm"),{type:bl.type});st("Export complete.");
   if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});else{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download=f.name;a.click()}}else st("Export stopped.")}
@@ -377,6 +434,23 @@ $("#plist").onclick=async e=>{const a=e.target.dataset.a,c=e.target.closest("[da
  else if(a==="del"&&confirm("Delete this project?")){if(pid===p.id)pid=null;deleteDoc(pref(p.id))}};
 $("#ex-pv").onclick=()=>{if(!base)return;buzz();sheet(`<h3>Preview</h3><img src="${proc(base,adj).toDataURL("image/jpeg",.85)}" alt="" style="max-width:100%;border-radius:14px">`)};
 rP();
+// ---- tool tabs, effects, text (Part 8)
+function chipify(root,sel,cb,before){const it=[...root.querySelectorAll(sel)];if(!it.length)return;const bar=document.createElement("div");bar.className="seg chips";
+ const pick=(i,u)=>{it.forEach((e,j)=>e.classList.toggle("hide",j!==i));[...bar.children].forEach((b,j)=>b.classList.toggle("on",j===i));if(cb)cb(i);if(u)buzz()};
+ it.forEach((e,i)=>{const b=document.createElement("button");b.textContent=(e.dataset.g||e.querySelector("span").textContent).split(" (")[0].replace("Whiten / fair skin","Whiten");b.onclick=()=>pick(i,1);bar.append(b)});
+ (before||it[0]).before(bar);pick(0)}
+$("#p-fx").innerHTML=FX.map(([k,n])=>`<div class="sl"><span>${n}</span><input type="range" id="x-${k}" min="0" max="100" value="0"></div>`).join("");
+FX.forEach(([k])=>{const el=$("#x-"+k);let q=0;el.oninput=()=>{adj[k]=+el.value;if(!q)q=requestAnimationFrame(()=>{q=0;render()})};el.onchange=()=>{adj[k]=+el.value;render();commit()}});
+const tIn=(id,k)=>{const el=$(id);el.oninput=()=>{adj[k]=k==="tt"?el.value:+el.value;render()};el.onchange=()=>{render();commit()}};tIn("#t-tt","tt");tIn("#t-tz","tz");tIn("#t-ss","ss");
+$("#t-em").onclick=e=>{if(e.target.tagName!=="BUTTON")return;buzz();adj.st=e.target.textContent;render();commit()};
+$("#t-rs").onclick=()=>{adj.tt="";adj.st="";$("#t-tt").value="";render();commit()};
+chipify($("#p-adj"),".sl");chipify($("#p-skin"),".sl");chipify($("#p-fx"),".sl");chipify($("#p-tx"),".sl",i=>txg=i);
+// video
+const vsl=(id,fn)=>$(id).oninput=e=>{fn(+e.target.value);show()};
+vsl("#vab",v=>vadj.b=v);vsl("#vac",v=>vadj.c=v);vsl("#vasat",v=>vadj.s=v);vsl("#vfi",v=>vfi=v);vsl("#vfo",v=>vfo=v);vsl("#vts",v=>vts=v);vsl("#vte",v=>vte=v);
+$("#vrot").onclick=()=>{vrot=(vrot+1)%4;buzz();show()};$("#vfh").onclick=()=>{vfh=!vfh;buzz();show()};$("#vfv").onclick=()=>{vfv=!vfv;buzz();show()};
+$("#vrev").onclick=e=>{const c=cur();if(!c)return;c.rev=!c.rev;e.target.textContent="Reverse this clip: "+(c.rev?"On":"Off");buzz()};
+chipify($("#vtools"),".vg",null,$("#vtools"));
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body></html>
