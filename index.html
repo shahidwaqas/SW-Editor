@@ -57,6 +57,11 @@ main{flex:1;overflow:auto;padding:18px 16px calc(110px + env(safe-area-inset-bot
 .seg{display:flex;gap:6px;flex-wrap:wrap}
 .seg button{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
 .seg button.on{background:var(--grad);color:#fff;border-color:transparent}
+.bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}.bar .ib{width:auto;min-width:40px;padding:0 12px;font-size:13px}
+.stage{position:relative;border-radius:18px;overflow:auto;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;max-height:52vh}
+#cv{max-width:100%;max-height:52vh;display:block}.stage.z #cv{max-width:none;max-height:none;width:200%}
+.grid{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent calc(33.3% - .5px),rgba(255,255,255,.8) 0 calc(33.3% + .5px),transparent 0 calc(66.6% - .5px),rgba(255,255,255,.8) 0 calc(66.6% + .5px),transparent 0),linear-gradient(transparent calc(33.3% - .5px),rgba(255,255,255,.8) 0 calc(33.3% + .5px),transparent 0 calc(66.6% - .5px),rgba(255,255,255,.8) 0 calc(66.6% + .5px),transparent 0)}
+.sl{margin-bottom:12px}.sl span{display:block;font-size:13px;color:var(--mute);margin-bottom:4px}.sl input{width:100%;accent-color:var(--a)}
 /* nav capsule */
 nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));display:flex;gap:4px;padding:6px;border-radius:999px;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line);box-shadow:var(--sh)}
 nav button{width:62px;height:50px;border-radius:999px;display:grid;place-items:center;color:var(--mute);transition:.2s}
@@ -89,7 +94,21 @@ nav svg,.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-widt
     <button class="ib" id="menu" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   </header>
   <main>
-    <div class="tab on" id="t-photo"><div class="hero"><h2>Photo Edit</h2><p>Gallery se photo chunein aur edit shuru karein.</p></div><div class="card"><h3>Editor jald aa raha hai</h3><p>Part 2 mein photo editor add hoga.</p></div></div>
+    <div class="tab on" id="t-photo">
+      <div id="ph-empty"><div class="hero"><h2>Photo Edit</h2><p>Gallery se photo chunein aur edit shuru karein.</p></div>
+        <label class="btn" style="display:block;text-align:center;cursor:pointer">Photo chunein<input id="file" type="file" accept="image/*" hidden></label></div>
+      <div id="ph-ed" class="hide">
+        <div class="bar"><button class="ib" id="un">Undo</button><button class="ib" id="re">Redo</button><button class="ib" id="bf">Before</button><button class="ib" id="gd">Grid</button><button class="ib" id="nw">Nayi photo</button></div>
+        <div class="stage" id="stage"><canvas id="cv"></canvas><div class="grid hide" id="grid"></div></div>
+        <div class="seg" id="ptabs" style="margin:12px 0"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
+        <div class="card pp" id="p-crop"><div class="seg" id="ratios"><button data-r="1">1:1</button><button data-r="0.8">4:5</button><button data-r="0.5625">9:16</button><button data-r="1.7778">16:9</button><button data-r="1.3333">4:3</button></div>
+          <div class="seg" style="margin-top:10px"><button id="rl">Rotate left</button><button id="rr">Rotate right</button><button id="fh">Flip H</button><button id="fv">Flip V</button></div></div>
+        <div class="card pp hide" id="p-adj"><div class="sl"><span>Brightness</span><input type="range" id="a-b" min="-100" max="100" value="0"></div><div class="sl"><span>Contrast</span><input type="range" id="a-c" min="-100" max="100" value="0"></div><div class="sl"><span>Saturation</span><input type="range" id="a-s" min="-100" max="100" value="0"></div><div class="sl"><span>Sharpness</span><input type="range" id="a-sh" min="0" max="100" value="0"></div><button class="ib" id="a-rs" style="width:auto;padding:0 14px">Reset</button></div>
+        <div class="card pp hide" id="p-rs"><div class="sl"><span id="rs-l">Size 100%</span><input type="range" id="rs-r" min="20" max="100" value="100"></div><button class="btn" id="rs-go">Resize lagayein</button></div>
+        <div class="card pp hide" id="p-ex"><div class="lab">Format</div><div class="seg" id="fm"><button data-v="jpeg" class="on">JPG</button><button data-v="png">PNG</button></div>
+          <div class="lab" style="margin-top:10px">Quality</div><div class="seg" id="ql"><button data-v=".6">Low</button><button data-v=".8">Medium</button><button data-v=".95" class="on">High</button></div>
+          <button class="btn" id="ex-go" style="margin-top:14px">Save / Share</button></div>
+      </div></div>
     <div class="tab" id="t-video"><div class="hero"><h2>Video Edit</h2><p>Clips jorein, trim karein, music lagayein.</p></div><div class="card"><h3>Editor jald aa raha hai</h3><p>Part 4 mein video editor add hoga.</p></div></div>
     <div class="tab" id="t-proj"><div class="hero"><h2>Projects</h2><p>Aapke drafts aur saved kaam yahan honge.</p></div><div class="card"><h3>Abhi koi project nahi</h3><p>Photo ya video edit karein, draft yahan save ho jayega.</p></div></div>
     <div class="tab" id="t-me"><div class="card"><div class="row"><span>Account</span><b id="who"></b></div>
@@ -146,6 +165,48 @@ $("#clr").onclick=async()=>{buzz();try{for(const k of await caches.keys())await 
 function tour(){const P=[["🖼️","Photo edit","Crop, filters, retouch aur text ik jagah."],["🎬","Video edit","Trim, music, captions aur export."],["📁","Projects","Drafts khud save hote hain."]];let i=0;
  const s=sheet("");const draw=()=>{s.querySelector(".sheet").innerHTML=`<div class="tour"><div class="em">${P[i][0]}</div><h3>${P[i][1]}</h3><p>${P[i][2]}</p><button class="btn" id="nx">${i<2?"Next":"Shuru karein"}</button></div>`;
   s.querySelector("#nx").onclick=()=>{buzz();if(i<2){i++;draw()}else{ls.set("toured","1");s.remove()}}};draw()}
+
+// ---- photo editor (Part 2)
+const cv=$("#cv"),cx=cv.getContext("2d");
+let base=null,pv=null,adj={b:0,c:0,s:0,sh:0},hist=[],hi=-1,fmt="jpeg",qual=.95;
+const mk=(w,h)=>{const c=document.createElement("canvas");c.width=Math.max(1,Math.round(w));c.height=Math.max(1,Math.round(h));return c};
+const fit=(i,m)=>{const k=Math.min(1,m/Math.max(i.width,i.height)),c=mk(i.width*k,i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);return c};
+function proc(src,a){const w=src.width,h=src.height,o=mk(w,h),x=o.getContext("2d");x.drawImage(src,0,0);
+ if(!a.b&&!a.c&&!a.s&&!a.sh)return o;
+ const id=x.getImageData(0,0,w,h),d=id.data,B=a.b*2.55,C=1+a.c/100,S=1+a.s/100;
+ for(let i=0;i<d.length;i+=4){let r=d[i]+B,g=d[i+1]+B,b=d[i+2]+B;r=(r-128)*C+128;g=(g-128)*C+128;b=(b-128)*C+128;const l=.299*r+.587*g+.114*b;d[i]=l+(r-l)*S;d[i+1]=l+(g-l)*S;d[i+2]=l+(b-l)*S}
+ if(a.sh){const k=a.sh/100*1.2,st=w*4,t=new Uint8ClampedArray(d);
+  for(let y=1;y<h-1;y++)for(let xx=1;xx<w-1;xx++){const p=y*st+xx*4;for(let c=0;c<3;c++)t[p+c]=d[p+c]*(1+4*k)-k*(d[p+c-4]+d[p+c+4]+d[p+c-st]+d[p+c+st])}
+  d.set(t)}
+ x.putImageData(id,0,0);return o}
+const render=()=>{const o=proc(pv,adj);cv.width=o.width;cv.height=o.height;cx.drawImage(o,0,0)};
+function upd(){$("#un").disabled=hi<=0;$("#re").disabled=hi>=hist.length-1}
+function commit(){hist=hist.slice(0,hi+1);hist.push({c:base,a:{...adj}});if(hist.length>12)hist.shift();hi=hist.length-1;upd()}
+function sync(){[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"]].forEach(([k,id])=>$("#"+id).value=adj[k])}
+function setBase(c,push=true){base=c;pv=fit(c,1100);render();if(push)commit()}
+function restore(i){hi=i;base=hist[i].c;adj={...hist[i].a};pv=fit(base,1100);sync();render();upd()}
+$("#un").onclick=()=>{if(hi>0){buzz();restore(hi-1)}};$("#re").onclick=()=>{if(hi<hist.length-1){buzz();restore(hi+1)}};
+$("#file").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{adj={b:0,c:0,s:0,sh:0};sync();hist=[];hi=-1;setBase(fit(im,3000));$("#ph-empty").classList.add("hide");$("#ph-ed").classList.remove("hide");URL.revokeObjectURL(im.src)};im.src=URL.createObjectURL(f);e.target.value=""};
+$("#nw").onclick=()=>{$("#ph-ed").classList.add("hide");$("#ph-empty").classList.remove("hide")};
+const geo=fn=>{buzz();const n=fn(base);setBase(n)};
+$("#rl").onclick=()=>geo(b=>{const n=mk(b.height,b.width),x=n.getContext("2d");x.translate(n.width/2,n.height/2);x.rotate(-Math.PI/2);x.drawImage(b,-b.width/2,-b.height/2);return n});
+$("#rr").onclick=()=>geo(b=>{const n=mk(b.height,b.width),x=n.getContext("2d");x.translate(n.width/2,n.height/2);x.rotate(Math.PI/2);x.drawImage(b,-b.width/2,-b.height/2);return n});
+$("#fh").onclick=()=>geo(b=>{const n=mk(b.width,b.height),x=n.getContext("2d");x.translate(b.width,0);x.scale(-1,1);x.drawImage(b,0,0);return n});
+$("#fv").onclick=()=>geo(b=>{const n=mk(b.width,b.height),x=n.getContext("2d");x.translate(0,b.height);x.scale(1,-1);x.drawImage(b,0,0);return n});
+$("#ratios").onclick=e=>{const r=parseFloat(e.target.dataset.r);if(!r)return;geo(b=>{let w=b.width,h=b.height;if(w/h>r)w=h*r;else h=w/r;const n=mk(w,h);n.getContext("2d").drawImage(b,(b.width-n.width)/2,(b.height-n.height)/2,n.width,n.height,0,0,n.width,n.height);return n})};
+[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"]].forEach(([k,id])=>{const el=$("#"+id);let q=0;
+ el.oninput=()=>{adj[k]=+el.value;if(!q)q=requestAnimationFrame(()=>{q=0;render()})};el.onchange=()=>{adj[k]=+el.value;render();commit()}});
+$("#a-rs").onclick=()=>{adj={b:0,c:0,s:0,sh:0};sync();render();commit()};
+$("#rs-r").oninput=e=>$("#rs-l").textContent="Size "+e.target.value+"%";
+$("#rs-go").onclick=()=>{const p=$("#rs-r").value/100;if(p<1)geo(b=>{const n=mk(b.width*p,b.height*p);n.getContext("2d").drawImage(b,0,0,n.width,n.height);return n});$("#rs-r").value=100;$("#rs-l").textContent="Size 100%"};
+$("#bf").onpointerdown=()=>{cx.drawImage(pv,0,0,cv.width,cv.height)};$("#bf").onpointerup=$("#bf").onpointerleave=()=>{if(pv)render()};
+$("#gd").onclick=()=>$("#grid").classList.toggle("hide");$("#cv").onclick=()=>$("#stage").classList.toggle("z");
+$("#ptabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;buzz();document.querySelectorAll("#ptabs button").forEach(b=>b.classList.toggle("on",b===e.target));document.querySelectorAll(".pp").forEach(x=>x.classList.toggle("hide",x.id!=="p-"+p))};
+const segPick=(id,fn)=>$(id).onclick=e=>{if(!e.target.dataset.v)return;buzz();document.querySelectorAll(id+" button").forEach(b=>b.classList.toggle("on",b===e.target));fn(e.target.dataset.v)};
+segPick("#fm",v=>fmt=v);segPick("#ql",v=>qual=+v);
+$("#ex-go").onclick=()=>{buzz();const o=proc(base,adj),ext=fmt==="png"?"png":"jpg";o.toBlob(bl=>{const f=new File([bl],"SW-Editor."+ext,{type:bl.type});
+ if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});
+ else{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download=f.name;a.click()}},"image/"+fmt,qual)};
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body></html>
