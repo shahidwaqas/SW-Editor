@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SW Editor">
-<meta name="theme-color" content="#7C3AED">
+<meta name="theme-color" content="#15803D">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=Inter:wght@400;500;600&display=swap">
 <style>
 :root{--bg:#F6F8FD;--card:#fff;--ink:#12122A;--mute:#6B6F8A;--line:rgba(18,18,42,.1);--a:#7C3AED;--b:#06B6D4;--grad:linear-gradient(135deg,var(--a),var(--b));--glass:rgba(255,255,255,.72);--sh:0 10px 30px rgba(40,30,90,.15)}
@@ -74,9 +74,11 @@ nav svg,.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-widt
 .sheet h3{margin-bottom:12px}.sheet .lab{color:var(--mute);margin:14px 0 8px;font-size:13px}
 .tour{text-align:center;padding:8px 4px}.tour .em{font-size:54px}.tour h3{margin:8px 0 4px}.tour p{color:var(--mute);margin-bottom:16px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-html[data-pack=purple]{--a:#3F3F46;--b:#8E8E96;--bg:#F2F2F4;--glass:rgba(237,237,239,.7)}
-html[data-pack=purple][data-mode=dark]{--a:#52525B;--bg:#0B0B0E;--glass:rgba(34,34,38,.6)}
-@media(prefers-color-scheme:dark){html[data-pack=purple][data-mode=auto]{--a:#52525B;--bg:#0B0B0E;--glass:rgba(34,34,38,.6)}}
+html[data-pack=purple]{--a:#15803D;--b:#22C55E;--bg:#F4F9F5;--card:#fff;--ink:#0F1F2E;--mute:#5E6F68;--line:rgba(15,31,46,.1);--glass:rgba(255,255,255,.78);--sh:0 10px 30px rgba(21,128,61,.16)}
+html[data-pack=purple][data-mode=dark]{--a:#22C55E;--b:#4ADE80;--bg:#07120C;--card:#0F1E16;--ink:#ECF6EF;--mute:#93A89C;--line:rgba(255,255,255,.1);--glass:rgba(15,30,22,.72);--sh:0 10px 30px rgba(0,0,0,.55)}
+@media(prefers-color-scheme:dark){html[data-pack=purple][data-mode=auto]{--a:#22C55E;--b:#4ADE80;--bg:#07120C;--card:#0F1E16;--ink:#ECF6EF;--mute:#93A89C;--line:rgba(255,255,255,.1);--glass:rgba(15,30,22,.72);--sh:0 10px 30px rgba(0,0,0,.55)}}
+html[data-pack=purple] .btn,html[data-pack=purple] .hero,html[data-pack=purple] nav button.on,html[data-pack=purple] .seg button.on{background:linear-gradient(135deg,#15803D,#22C55E)}
+html[data-pack=purple][data-mode=dark] .btn,html[data-pack=purple][data-mode=dark] .hero,html[data-pack=purple][data-mode=dark] nav button.on,html[data-pack=purple][data-mode=dark] .seg button.on{color:#05210F;background:linear-gradient(135deg,#22C55E,#4ADE80)}
 header{border-radius:0 0 28px 28px;backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8)}
 nav{backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);border:1px solid rgba(255,255,255,.5)}
 .sheet{background:var(--glass);backdrop-filter:blur(34px) saturate(1.8);-webkit-backdrop-filter:blur(34px) saturate(1.8);border-radius:36px 36px 0 0}
@@ -84,6 +86,20 @@ nav{backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) 
 .ib,.btn,.seg button,nav button{transition:transform .15s}.ib:active,.btn:active,.seg button:active,nav button:active{transform:scale(.94)}
 .stage{overflow:hidden;position:sticky;top:0;z-index:6;max-height:40vh}#cv{max-height:40vh;touch-action:none;transition:transform .3s}
 #ptabs{flex-wrap:nowrap;overflow-x:auto}#ptabs button{flex:none}
+
+/* header banner */
+header{position:relative;height:calc(env(safe-area-inset-top) + 72px);padding:env(safe-area-inset-top) 0 0;background:#fff url(banner.png) center/cover no-repeat;border:0;border-radius:0 0 26px 26px;box-shadow:0 6px 22px rgba(21,128,61,.14);backdrop-filter:none;-webkit-backdrop-filter:none}
+header .ib{position:absolute;right:12px;bottom:18px;width:38px;height:38px;background:rgba(255,255,255,.85);border-color:rgba(21,128,61,.25);color:#0F1F2E}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* fixed preview on top, tools scroll below */
+.stage{position:relative;top:auto;max-height:36vh;flex:none}
+#cv{max-height:36vh}#vc{max-height:34vh!important}
+.tools{min-height:0}
+main:has(#t-photo.on #ph-ed:not(.hide)),main:has(#t-video.on){overflow:hidden;padding-bottom:0;display:flex;flex-direction:column}
+#t-photo.on:has(#ph-ed:not(.hide)),#t-video.on{flex:1;min-height:0;display:flex;flex-direction:column}
+#ph-ed:not(.hide){flex:1;min-height:0;display:flex;flex-direction:column}
+.tools{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+#ph-ed .bar,#t-video .bar{flex:none;flex-wrap:nowrap;overflow-x:auto}
 </style></head>
 <body>
 <section id="login">
@@ -100,7 +116,7 @@ nav{backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) 
 </section>
 
 <div id="app" class="hide">
-  <header><img src="mark.png" alt=""><div class="brand">SW Editor</div>
+  <header><span class="sr">SW Editor</span>
     <button class="ib" id="menu" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   </header>
   <main>
@@ -110,8 +126,8 @@ nav{backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) 
       <div id="ph-ed" class="hide">
         <div class="bar"><button class="ib" id="un">Undo</button><button class="ib" id="re">Redo</button><button class="ib" id="bf">Before</button><button class="ib" id="gd">Grid</button><button class="ib" id="zm">Zoom: on</button><button class="ib" id="nw">New photo</button></div>
         <div class="stage" id="stage"><canvas id="cv"></canvas><div class="grid hide" id="grid"></div></div>
-        <div class="seg" id="ptabs" style="margin:12px 0"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="flt">Filters</button><button data-p="skin">Skin</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
-        <div class="card pp" id="p-crop"><div class="seg" id="ratios"><button data-r="1">1:1</button><button data-r="0.8">4:5</button><button data-r="0.5625">9:16</button><button data-r="1.7778">16:9</button><button data-r="1.3333">4:3</button></div>
+        <div class="seg" id="ptabs" style="margin:12px 0;flex:none"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="flt">Filters</button><button data-p="skin">Skin</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
+        <div class="tools"><div class="card pp" id="p-crop"><div class="seg" id="ratios"><button data-r="1">1:1</button><button data-r="0.8">4:5</button><button data-r="0.5625">9:16</button><button data-r="1.7778">16:9</button><button data-r="1.3333">4:3</button></div>
           <div class="seg" style="margin-top:10px"><button id="rl">Rotate left</button><button id="rr">Rotate right</button><button id="fh">Flip H</button><button id="fv">Flip V</button></div></div>
         <div class="card pp hide" id="p-adj"><div class="sl"><span>Brightness</span><input type="range" id="a-b" min="-100" max="100" value="0"></div><div class="sl"><span>Contrast</span><input type="range" id="a-c" min="-100" max="100" value="0"></div><div class="sl"><span>Saturation</span><input type="range" id="a-s" min="-100" max="100" value="0"></div><div class="sl"><span>Sharpness</span><input type="range" id="a-sh" min="0" max="100" value="0"></div><button class="ib" id="a-rs" style="width:auto;padding:0 14px">Reset</button></div>
         <div class="card pp hide" id="p-flt"></div>
@@ -119,14 +135,14 @@ nav{backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) 
         <div class="card pp hide" id="p-rs"><div class="sl"><span id="rs-l">Size 100%</span><input type="range" id="rs-r" min="20" max="100" value="100"></div><button class="btn" id="rs-go">Apply resize</button></div>
         <div class="card pp hide" id="p-ex"><div class="lab">Format</div><div class="seg" id="fm"><button data-v="jpeg" class="on">JPG</button><button data-v="png">PNG</button></div>
           <div class="lab" style="margin-top:10px">Quality</div><div class="seg" id="ql"><button data-v=".6">Low</button><button data-v=".8">Medium</button><button data-v=".95" class="on">High</button></div>
-          <button class="ib" id="ex-pv" style="width:auto;padding:0 14px;margin-top:12px">Preview</button><button class="btn" id="ex-go" style="margin-top:14px">Save / Share</button></div>
+          <button class="ib" id="ex-pv" style="width:auto;padding:0 14px;margin-top:12px">Preview</button><button class="btn" id="ex-go" style="margin-top:14px">Save / Share</button></div></div>
       </div></div>
     <div class="tab" id="t-video">
       <label class="btn" style="display:block;text-align:center;cursor:pointer">Add video clips<input id="vfile" type="file" accept="video/*" multiple hidden></label>
       <div class="stage" style="margin-top:12px"><canvas id="vc" width="640" height="360" style="max-width:100%;max-height:42vh"></canvas></div>
       <div class="bar" style="margin-top:10px"><button class="ib" id="vplay">Play</button><button class="ib" id="vsplit">Split</button><button class="ib" id="vdel">Delete</button><button class="ib" id="vbf">Before</button><button class="ib" id="vl">Left</button><button class="ib" id="vr">Right</button></div>
-      <div class="seg" id="vclips" style="margin-bottom:10px"></div>
-      <div class="card"><div class="sl"><span id="l-in">Trim start</span><input type="range" id="vin" min="0" max="1" step="0.1" value="0"></div><div class="sl"><span id="l-out">Trim end</span><input type="range" id="vout" min="0" max="1" step="0.1" value="1"></div><div class="sl"><span id="l-sk">Split position</span><input type="range" id="vseek" min="0" max="1" step="0.1" value="0"></div>
+      <div class="seg" id="vclips" style="margin-bottom:10px;flex-wrap:nowrap;overflow-x:auto;flex:none"></div>
+      <div class="tools"><div class="card"><div class="sl"><span id="l-in">Trim start</span><input type="range" id="vin" min="0" max="1" step="0.1" value="0"></div><div class="sl"><span id="l-out">Trim end</span><input type="range" id="vout" min="0" max="1" step="0.1" value="1"></div><div class="sl"><span id="l-sk">Split position</span><input type="range" id="vseek" min="0" max="1" step="0.1" value="0"></div>
         <div class="lab">Speed</div><div class="seg" id="vsp"><button data-v="0.5">0.5x</button><button data-v="1" class="on">1x</button><button data-v="1.5">1.5x</button><button data-v="2">2x</button></div>
         <div class="sl" style="margin-top:10px"><span>Clip volume</span><input type="range" id="vvol" min="0" max="1" step="0.05" value="1"></div></div>
       <div class="card"><div class="lab">Aspect ratio</div><div class="seg" id="vas"><button data-v="0" class="on">Original</button><button data-v="0.5625">9:16</button><button data-v="1">1:1</button><button data-v="1.7778">16:9</button></div>
@@ -136,7 +152,7 @@ nav{backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) 
         <div class="lab" style="margin-top:10px">Music</div><label class="ib" style="width:auto;padding:0 14px;display:inline-grid;cursor:pointer" id="vmus">Choose music<input id="vmf" type="file" accept="audio/*" hidden></label>
         <div class="sl" style="margin-top:8px"><span>Music volume</span><input type="range" id="vmv" min="0" max="1" step="0.05" value="0.7"></div></div>
       <div class="card"><div class="lab">Export quality</div><div class="seg" id="vrs"><button data-v="720" class="on">720p</button><button data-v="1080">1080p</button></div>
-        <button class="btn" id="vex" style="margin-top:12px">Export video</button><p id="vst" style="color:var(--mute);font-size:13px;margin-top:8px">Export runs in real time and takes as long as the video. Keep the screen on and don't close the app.</p></div>
+        <button class="btn" id="vex" style="margin-top:12px">Export video</button><p id="vst" style="color:var(--mute);font-size:13px;margin-top:8px">Export runs in real time and takes as long as the video. Keep the screen on and don't close the app.</p></div></div>
     </div>
     <div class="tab" id="t-proj">
       <input id="pq" placeholder="Search projects" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-bottom:10px">
@@ -188,7 +204,7 @@ $("#nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;buzz();
 // sheets
 function sheet(html){const s=document.createElement("div");s.className="shade";s.innerHTML=`<div class="sheet">${html}</div>`;
  s.onclick=e=>{if(e.target===s)s.remove()};document.body.append(s);return s}
-function themeSheet(){const s=sheet(`<h3>Theme</h3><div class="lab">Colour</div><div class="seg" id="sp"><button data-v="purple">Soft Grey</button><button data-v="orange">Sunset Orange</button><button data-v="amoled">AMOLED Black</button></div><div class="lab">Mode</div><div class="seg" id="sm"><button data-v="auto">Auto</button><button data-v="light">Light</button><button data-v="dark">Dark</button></div>`);
+function themeSheet(){const s=sheet(`<h3>Theme</h3><div class="lab">Colour</div><div class="seg" id="sp"><button data-v="purple">SW Green</button><button data-v="orange">Sunset Orange</button><button data-v="amoled">AMOLED Black</button></div><div class="lab">Mode</div><div class="seg" id="sm"><button data-v="auto">Auto</button><button data-v="light">Light</button><button data-v="dark">Dark</button></div>`);
  const mark=()=>{s.querySelectorAll("#sp button").forEach(b=>b.classList.toggle("on",b.dataset.v===(ls.get("pack")||"purple")));
   s.querySelectorAll("#sm button").forEach(b=>b.classList.toggle("on",b.dataset.v===(ls.get("mode")||"auto")))};mark();
  s.querySelector("#sp").onclick=e=>{if(e.target.dataset.v){buzz();ls.set("pack",e.target.dataset.v);applyTheme();mark()}};
@@ -215,6 +231,7 @@ function bl(s,w,h,r,ch){const T=new s.constructor(s.length),O=new s.constructor(
  for(let y=0;y<h;y++)for(let c=0;c<ch;c++){let a=0;const R=y*w;for(let x=-r;x<=r;x++)a+=s[(R+cl(x,w-1))*ch+c];for(let x=0;x<w;x++){T[(R+x)*ch+c]=a/n;a+=s[(R+cl(x+r+1,w-1))*ch+c]-s[(R+cl(x-r,w-1))*ch+c]}}
  for(let x=0;x<w;x++)for(let c=0;c<ch;c++){let a=0;for(let y=-r;y<=r;y++)a+=T[(cl(y,h-1)*w+x)*ch+c];for(let y=0;y<h;y++){O[(y*w+x)*ch+c]=a/n;a+=T[(cl(y+r+1,h-1)*w+x)*ch+c]-T[(cl(y-r,h-1)*w+x)*ch+c]}}
  return O}
+const ed=(r,g,b,L,i)=>{const q=Math.abs(r-L[i])+Math.abs(g-L[i+1])+Math.abs(b-L[i+2]);return q>=70?.15:1-.85*q/70};
 function proc(src,a){const w=src.width,h=src.height,o=mk(w,h),x=o.getContext("2d");x.drawImage(src,0,0);
  const F=FL[a.f],k=a.fs/100,sk=a.sm||a.gl||a.tn||a.ev||a.wr||a.sy||a.tp||a.wh;
  if(!a.b&&!a.c&&!a.s&&!a.sh&&!F&&!sk)return o;
@@ -225,9 +242,9 @@ function proc(src,a){const w=src.width,h=src.height,o=mk(w,h),x=o.getContext("2d
   for(let p=0;p<m.length;p++){const i=p*4,r=d[i],g=d[i+1],b=d[i+2],cb=128-.1687*r-.3313*g+.5*b,cr=128+.5*r-.4187*g-.0813*b;if(cb>77&&cb<127&&cr>133&&cr<173&&r>60)m[p]=1}
   const rS=Math.max(2,Math.round(w/110)),mk2=bl(m,w,h,3,1),bs=(a.sm||a.gl)?bl(d,w,h,rS,4):0,bw=a.wr?bl(d,w,h,Math.max(1,rS>>1),4):0,be=a.ev?bl(d,w,h,rS*5,4):0;
   for(let p=0;p<m.length;p++){let M=mk2[p];if(a.fr&&M>=.03){const dd=Math.hypot(p%w-a.fx*w,(p/w|0)-a.fy*h)/(a.fr/100*Math.min(w,h)),q=dd<1?1:dd<1.25?1-(dd-1)/.25:0;M*=q+(1-q)*a.bd/100}if(M<.03)continue;const i=p*4;let r=d[i],g=d[i+1],b=d[i+2],t;
-   if(a.sm){t=Math.min(1,M*a.sm/100*1.15);r+=(bs[i]-r)*t;g+=(bs[i+1]-g)*t;b+=(bs[i+2]-b)*t}
-   if(a.wr){t=Math.min(1,M*a.wr/100*1.1);r+=(bw[i]-r)*t;g+=(bw[i+1]-g)*t;b+=(bw[i+2]-b)*t}
-   if(a.ev){t=Math.min(1,M*a.ev/100);r+=(be[i]-r)*t;g+=(be[i+1]-g)*t;b+=(be[i+2]-b)*t}
+   if(a.sm){t=Math.min(1,M*a.sm/100*1.15);const e=ed(r,g,b,bs,i);r+=(bs[i]+(r-bs[i])*.45-r)*t*e;g+=(bs[i+1]+(g-bs[i+1])*.45-g)*t*e;b+=(bs[i+2]+(b-bs[i+2])*.45-b)*t*e}
+   if(a.wr){t=Math.min(1,M*a.wr/100*1.1);const e=ed(r,g,b,bw,i);r+=(bw[i]+(r-bw[i])*.5-r)*t*e;g+=(bw[i+1]+(g-bw[i+1])*.5-g)*t*e;b+=(bw[i+2]+(b-bw[i+2])*.5-b)*t*e}
+   if(a.ev){t=Math.min(1,M*a.ev/100);const e=ed(r,g,b,be,i);r+=(be[i]+(r-be[i])*.5-r)*t*e;g+=(be[i+1]+(g-be[i+1])*.5-g)*t*e;b+=(be[i+2]+(b-be[i+2])*.5-b)*t*e}
    if(a.gl){t=M*a.gl/100;r+=t*34;g+=t*26;b+=t*18}
    if(a.tn){t=M*a.tn/100;r+=t*24;b-=t*20;if(t<0){r-=t*24;g-=t*24;b-=t*24}}
    if(a.sy){const l=.299*r+.587*g+.114*b;if(l>165){t=M*a.sy/100*Math.min(1,(l-165)/60)*.9;r-=(r-150)*t;g-=(g-150)*t;b-=(b-150)*t}}
