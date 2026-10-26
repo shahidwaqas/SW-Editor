@@ -100,10 +100,12 @@ nav svg,.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-widt
       <div id="ph-ed" class="hide">
         <div class="bar"><button class="ib" id="un">Undo</button><button class="ib" id="re">Redo</button><button class="ib" id="bf">Before</button><button class="ib" id="gd">Grid</button><button class="ib" id="nw">Nayi photo</button></div>
         <div class="stage" id="stage"><canvas id="cv"></canvas><div class="grid hide" id="grid"></div></div>
-        <div class="seg" id="ptabs" style="margin:12px 0"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
+        <div class="seg" id="ptabs" style="margin:12px 0"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="flt">Filters</button><button data-p="skin">Skin</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
         <div class="card pp" id="p-crop"><div class="seg" id="ratios"><button data-r="1">1:1</button><button data-r="0.8">4:5</button><button data-r="0.5625">9:16</button><button data-r="1.7778">16:9</button><button data-r="1.3333">4:3</button></div>
           <div class="seg" style="margin-top:10px"><button id="rl">Rotate left</button><button id="rr">Rotate right</button><button id="fh">Flip H</button><button id="fv">Flip V</button></div></div>
         <div class="card pp hide" id="p-adj"><div class="sl"><span>Brightness</span><input type="range" id="a-b" min="-100" max="100" value="0"></div><div class="sl"><span>Contrast</span><input type="range" id="a-c" min="-100" max="100" value="0"></div><div class="sl"><span>Saturation</span><input type="range" id="a-s" min="-100" max="100" value="0"></div><div class="sl"><span>Sharpness</span><input type="range" id="a-sh" min="0" max="100" value="0"></div><button class="ib" id="a-rs" style="width:auto;padding:0 14px">Reset</button></div>
+        <div class="card pp hide" id="p-flt"></div>
+        <div class="card pp hide" id="p-skin"></div>
         <div class="card pp hide" id="p-rs"><div class="sl"><span id="rs-l">Size 100%</span><input type="range" id="rs-r" min="20" max="100" value="100"></div><button class="btn" id="rs-go">Resize lagayein</button></div>
         <div class="card pp hide" id="p-ex"><div class="lab">Format</div><div class="seg" id="fm"><button data-v="jpeg" class="on">JPG</button><button data-v="png">PNG</button></div>
           <div class="lab" style="margin-top:10px">Quality</div><div class="seg" id="ql"><button data-v=".6">Low</button><button data-v=".8">Medium</button><button data-v=".95" class="on">High</button></div>
@@ -168,25 +170,48 @@ function tour(){const P=[["🖼️","Photo edit","Crop, filters, retouch aur tex
 
 // ---- photo editor (Part 2)
 const cv=$("#cv"),cx=cv.getContext("2d");
-let base=null,pv=null,adj={b:0,c:0,s:0,sh:0},hist=[],hi=-1,fmt="jpeg",qual=.95;
+const DEF=()=>({b:0,c:0,s:0,sh:0,f:'',fs:100,sm:0,gl:0,tn:0,ev:0,wr:0,sy:0,tp:0});
+let base=null,pv=null,adj=DEF(),hist=[],hi=-1,fmt="jpeg",qual=.95;
 const mk=(w,h)=>{const c=document.createElement("canvas");c.width=Math.max(1,Math.round(w));c.height=Math.max(1,Math.round(h));return c};
 const fit=(i,m)=>{const k=Math.min(1,m/Math.max(i.width,i.height)),c=mk(i.width*k,i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);return c};
+const FL={"Soft":{g:"Portrait",b:6,c:-8,s:-5,o:[8,2,-4]},"Warm glow":{g:"Portrait",b:8,c:-4,s:8,o:[14,4,-8]},"Rosy":{g:"Portrait",b:5,c:-6,s:4,o:[10,-2,4]},
+"Retro":{g:"Vintage",b:4,c:-12,s:-20,o:[18,8,-14]},"Film":{g:"Vintage",b:-2,c:10,s:-12,o:[8,4,-6]},"Faded":{g:"Vintage",b:10,c:-22,s:-18,o:[6,6,6]},
+"Mono":{g:"B&W / Cinema",m:1,c:6},"Noir":{g:"B&W / Cinema",m:1,c:35,b:-8},"Cinematic":{g:"B&W / Cinema",b:-4,c:16,s:-6,o:[-6,2,10]},"Moody":{g:"B&W / Cinema",b:-12,c:18,s:-14,o:[-4,0,8]},
+"Vivid":{g:"Vivid",c:10,s:40},"Food":{g:"Vivid",b:4,c:8,s:28,o:[10,4,-8]},"Nature":{g:"Vivid",c:8,s:26,o:[-4,8,-2]},"Travel":{g:"Vivid",b:3,c:12,s:22,o:[4,2,-6]}};
+function bl(s,w,h,r,ch){const T=new s.constructor(s.length),O=new s.constructor(s.length),n=2*r+1,cl=(v,m)=>v<0?0:v>m?m:v;
+ for(let y=0;y<h;y++)for(let c=0;c<ch;c++){let a=0;const R=y*w;for(let x=-r;x<=r;x++)a+=s[(R+cl(x,w-1))*ch+c];for(let x=0;x<w;x++){T[(R+x)*ch+c]=a/n;a+=s[(R+cl(x+r+1,w-1))*ch+c]-s[(R+cl(x-r,w-1))*ch+c]}}
+ for(let x=0;x<w;x++)for(let c=0;c<ch;c++){let a=0;for(let y=-r;y<=r;y++)a+=T[(cl(y,h-1)*w+x)*ch+c];for(let y=0;y<h;y++){O[(y*w+x)*ch+c]=a/n;a+=T[(cl(y+r+1,h-1)*w+x)*ch+c]-T[(cl(y-r,h-1)*w+x)*ch+c]}}
+ return O}
 function proc(src,a){const w=src.width,h=src.height,o=mk(w,h),x=o.getContext("2d");x.drawImage(src,0,0);
- if(!a.b&&!a.c&&!a.s&&!a.sh)return o;
- const id=x.getImageData(0,0,w,h),d=id.data,B=a.b*2.55,C=1+a.c/100,S=1+a.s/100;
- for(let i=0;i<d.length;i+=4){let r=d[i]+B,g=d[i+1]+B,b=d[i+2]+B;r=(r-128)*C+128;g=(g-128)*C+128;b=(b-128)*C+128;const l=.299*r+.587*g+.114*b;d[i]=l+(r-l)*S;d[i+1]=l+(g-l)*S;d[i+2]=l+(b-l)*S}
- if(a.sh){const k=a.sh/100*1.2,st=w*4,t=new Uint8ClampedArray(d);
-  for(let y=1;y<h-1;y++)for(let xx=1;xx<w-1;xx++){const p=y*st+xx*4;for(let c=0;c<3;c++)t[p+c]=d[p+c]*(1+4*k)-k*(d[p+c-4]+d[p+c+4]+d[p+c-st]+d[p+c+st])}
+ const F=FL[a.f],k=a.fs/100,sk=a.sm||a.gl||a.tn||a.ev||a.wr||a.sy||a.tp;
+ if(!a.b&&!a.c&&!a.s&&!a.sh&&!F&&!sk)return o;
+ const id=x.getImageData(0,0,w,h),d=id.data;let B=a.b*2.55,C=1+a.c/100,S=1+a.s/100,of=[0,0,0];
+ if(F){B+=(F.b||0)*2.55*k;C*=1+(F.c||0)/100*k;S*=1+(F.s||0)/100*k;if(F.o)of=F.o.map(v=>v*k);if(F.m)S*=1-k}
+ for(let i=0;i<d.length;i+=4){let r=d[i]+B+of[0],g=d[i+1]+B+of[1],b=d[i+2]+B+of[2];r=(r-128)*C+128;g=(g-128)*C+128;b=(b-128)*C+128;const l=.299*r+.587*g+.114*b;d[i]=l+(r-l)*S;d[i+1]=l+(g-l)*S;d[i+2]=l+(b-l)*S}
+ if(sk){const m=new Float32Array(w*h);
+  for(let p=0;p<m.length;p++){const i=p*4,r=d[i],g=d[i+1],b=d[i+2],cb=128-.1687*r-.3313*g+.5*b,cr=128+.5*r-.4187*g-.0813*b;if(cb>77&&cb<127&&cr>133&&cr<173&&r>60)m[p]=1}
+  const rS=Math.max(2,Math.round(w/180)),mk2=bl(m,w,h,3,1),bs=(a.sm||a.gl)?bl(d,w,h,rS,4):0,bw=a.wr?bl(d,w,h,Math.max(1,rS>>1),4):0,be=a.ev?bl(d,w,h,rS*5,4):0;
+  for(let p=0;p<m.length;p++){const M=mk2[p];if(M<.03)continue;const i=p*4;let r=d[i],g=d[i+1],b=d[i+2],t;
+   if(a.sm){t=M*a.sm/100*.85;r+=(bs[i]-r)*t;g+=(bs[i+1]-g)*t;b+=(bs[i+2]-b)*t}
+   if(a.wr){t=M*a.wr/100*.8;r+=(bw[i]-r)*t;g+=(bw[i+1]-g)*t;b+=(bw[i+2]-b)*t}
+   if(a.ev){t=M*a.ev/100*.6;r+=(be[i]-r)*t;g+=(be[i+1]-g)*t;b+=(be[i+2]-b)*t}
+   if(a.gl){t=M*a.gl/100;r+=t*18;g+=t*14;b+=t*10}
+   if(a.tn){t=M*a.tn/100;r+=t*14;b-=t*12;if(t<0){r-=t*14;g-=t*14;b-=t*14}}
+   if(a.sy){const l=.299*r+.587*g+.114*b;if(l>165){t=M*a.sy/100*Math.min(1,(l-165)/60)*.6;r-=(r-150)*t;g-=(g-150)*t;b-=(b-150)*t}}
+   if(a.tp){t=M*a.tp/100;r+=10*t;g+=14*t;b+=16*t}
+   d[i]=r;d[i+1]=g;d[i+2]=b}}
+ if(a.sh){const kk=a.sh/100*1.2,st=w*4,t=new Uint8ClampedArray(d);
+  for(let y=1;y<h-1;y++)for(let xx=1;xx<w-1;xx++){const p=y*st+xx*4;for(let c=0;c<3;c++)t[p+c]=d[p+c]*(1+4*kk)-kk*(d[p+c-4]+d[p+c+4]+d[p+c-st]+d[p+c+st])}
   d.set(t)}
  x.putImageData(id,0,0);return o}
 const render=()=>{const o=proc(pv,adj);cv.width=o.width;cv.height=o.height;cx.drawImage(o,0,0)};
 function upd(){$("#un").disabled=hi<=0;$("#re").disabled=hi>=hist.length-1}
 function commit(){hist=hist.slice(0,hi+1);hist.push({c:base,a:{...adj}});if(hist.length>12)hist.shift();hi=hist.length-1;upd()}
-function sync(){[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"]].forEach(([k,id])=>$("#"+id).value=adj[k])}
+function sync(){[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"]].forEach(([k,id])=>$("#"+id).value=adj[k]);SK.forEach(([k])=>$("#k-"+k).value=adj[k]);$("#fs").value=adj.fs;markF()}
 function setBase(c,push=true){base=c;pv=fit(c,1100);render();if(push)commit()}
 function restore(i){hi=i;base=hist[i].c;adj={...hist[i].a};pv=fit(base,1100);sync();render();upd()}
 $("#un").onclick=()=>{if(hi>0){buzz();restore(hi-1)}};$("#re").onclick=()=>{if(hi<hist.length-1){buzz();restore(hi+1)}};
-$("#file").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{adj={b:0,c:0,s:0,sh:0};sync();hist=[];hi=-1;setBase(fit(im,3000));$("#ph-empty").classList.add("hide");$("#ph-ed").classList.remove("hide");URL.revokeObjectURL(im.src)};im.src=URL.createObjectURL(f);e.target.value=""};
+$("#file").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{adj=DEF();sync();hist=[];hi=-1;setBase(fit(im,3000));$("#ph-empty").classList.add("hide");$("#ph-ed").classList.remove("hide");URL.revokeObjectURL(im.src)};im.src=URL.createObjectURL(f);e.target.value=""};
 $("#nw").onclick=()=>{$("#ph-ed").classList.add("hide");$("#ph-empty").classList.remove("hide")};
 const geo=fn=>{buzz();const n=fn(base);setBase(n)};
 $("#rl").onclick=()=>geo(b=>{const n=mk(b.height,b.width),x=n.getContext("2d");x.translate(n.width/2,n.height/2);x.rotate(-Math.PI/2);x.drawImage(b,-b.width/2,-b.height/2);return n});
@@ -196,7 +221,7 @@ $("#fv").onclick=()=>geo(b=>{const n=mk(b.width,b.height),x=n.getContext("2d");x
 $("#ratios").onclick=e=>{const r=parseFloat(e.target.dataset.r);if(!r)return;geo(b=>{let w=b.width,h=b.height;if(w/h>r)w=h*r;else h=w/r;const n=mk(w,h);n.getContext("2d").drawImage(b,(b.width-n.width)/2,(b.height-n.height)/2,n.width,n.height,0,0,n.width,n.height);return n})};
 [["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"]].forEach(([k,id])=>{const el=$("#"+id);let q=0;
  el.oninput=()=>{adj[k]=+el.value;if(!q)q=requestAnimationFrame(()=>{q=0;render()})};el.onchange=()=>{adj[k]=+el.value;render();commit()}});
-$("#a-rs").onclick=()=>{adj={b:0,c:0,s:0,sh:0};sync();render();commit()};
+$("#a-rs").onclick=()=>{adj=DEF();sync();render();commit()};
 $("#rs-r").oninput=e=>$("#rs-l").textContent="Size "+e.target.value+"%";
 $("#rs-go").onclick=()=>{const p=$("#rs-r").value/100;if(p<1)geo(b=>{const n=mk(b.width*p,b.height*p);n.getContext("2d").drawImage(b,0,0,n.width,n.height);return n});$("#rs-r").value=100;$("#rs-l").textContent="Size 100%"};
 $("#bf").onpointerdown=()=>{cx.drawImage(pv,0,0,cv.width,cv.height)};$("#bf").onpointerup=$("#bf").onpointerleave=()=>{if(pv)render()};
@@ -207,6 +232,27 @@ segPick("#fm",v=>fmt=v);segPick("#ql",v=>qual=+v);
 $("#ex-go").onclick=()=>{buzz();const o=proc(base,adj),ext=fmt==="png"?"png":"jpg";o.toBlob(bl=>{const f=new File([bl],"SW-Editor."+ext,{type:bl.type});
  if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});
  else{const a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download=f.name;a.click()}},"image/"+fmt,qual)};
+
+// ---- filters + skin (Part 3)
+const SK=[["sm","Skin smoothing"],["gl","Glow"],["tn","Skin tone (cool / fair to warm)"],["ev","Even-out"],["wr","Wrinkle smooth"],["sy","Shine remove"],["tp","Tan remove + brighten"]];
+$("#p-skin").innerHTML=SK.map(([k,n])=>`<div class="sl"><span>${n}</span><input type="range" id="k-${k}" min="${k==="tn"?-100:0}" max="100" value="0"></div>`).join("")+'<button class="ib" id="k-rs" style="width:auto;padding:0 14px">Reset skin</button><p style="color:var(--mute);font-size:12px;margin-top:8px">Skin colour khud pehchani jati hai. Face-point tools (teeth, eyes, makeup) baad ke part mein.</p>';
+SK.forEach(([k])=>{const el=$("#k-"+k);let q=0;el.oninput=()=>{adj[k]=+el.value;if(!q)q=requestAnimationFrame(()=>{q=0;render()})};el.onchange=()=>{adj[k]=+el.value;render();commit()}});
+$("#k-rs").onclick=()=>{SK.forEach(([k])=>adj[k]=0);sync();render();commit()};
+const favs=()=>{try{return JSON.parse(ls.get("favs")||"[]")}catch(e){return[]}};
+function drawF(){const gs=[...new Set(Object.values(FL).map(f=>f.g))];
+ $("#p-flt").innerHTML=`<div class="sl"><span>Filter strength</span><input type="range" id="fs" min="0" max="100" value="${adj.fs}"></div>
+ <div class="seg" style="margin-bottom:10px"><button id="f-none">No filter</button><button id="f-auto">Auto suggest</button><button id="f-fav">Favourite</button></div>
+ <div id="f-favs">${favs().length?'<div class="lab">Favourites</div><div class="seg">'+favs().map(n=>`<button data-f="${n}">${n}</button>`).join("")+'</div>':""}</div>`+
+ gs.map(g=>`<div class="lab" style="margin-top:10px">${g}</div><div class="seg">${Object.keys(FL).filter(n=>FL[n].g===g).map(n=>`<button data-f="${n}">${n}</button>`).join("")}</div>`).join("");
+ const fs=$("#fs");fs.oninput=()=>{adj.fs=+fs.value;render()};fs.onchange=()=>{adj.fs=+fs.value;render();commit()};
+ $("#f-none").onclick=()=>setF("");
+ $("#f-fav").onclick=()=>{if(!adj.f)return;const v=favs();if(!v.includes(adj.f)){v.push(adj.f);ls.set("favs",JSON.stringify(v))}buzz();const y=adj.fs;drawF();$("#fs").value=y;markF()};
+ $("#f-auto").onclick=()=>{const t=fit(pv,64).getContext("2d").getImageData(0,0,64,64).data;let L=0,Sa=0,n=0;for(let i=0;i<t.length;i+=4){const r=t[i],g=t[i+1],b=t[i+2];L+=.299*r+.587*g+.114*b;Sa+=Math.max(r,g,b)-Math.min(r,g,b);n++}L/=n;Sa/=n;
+  setF(L<85?"Warm glow":Sa<35?"Vivid":L>170?"Moody":"Soft")};
+ $("#p-flt").onclick=e=>{if(e.target.dataset.f)setF(e.target.dataset.f)}}
+function setF(n){buzz();adj.f=n;markF();render();commit()}
+function markF(){document.querySelectorAll("#p-flt [data-f]").forEach(b=>b.classList.toggle("on",b.dataset.f===adj.f));const x=$("#f-none");if(x)x.classList.toggle("on",!adj.f)}
+drawF();
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body></html>
