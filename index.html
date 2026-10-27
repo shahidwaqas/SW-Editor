@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-pack="purple" data-mode="auto"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>SW Editor</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -121,6 +121,31 @@ html[data-pack][data-mode] .btn,html[data-pack][data-mode] .hero,html[data-pack]
 nav{background-image:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),var(--sh)}
 .chips{flex:none;flex-wrap:nowrap;overflow-x:auto;margin-bottom:10px;padding-bottom:2px}.chips button{flex:none}
 #t-video .chips{margin:8px 0 8px}
+
+/* Part 9 */
+html{touch-action:manipulation;-webkit-text-size-adjust:100%}body{overscroll-behavior:none;overflow-x:hidden}
+input,textarea,select{font-size:16px}
+input[type=range]{touch-action:none;min-height:36px}
+.tools{touch-action:pan-y}.chips{touch-action:pan-x}
+header{justify-content:flex-start;padding-left:14px}header .bn{max-width:calc(100% - 76px)}
+#login{place-items:start center!important;align-items:flex-start!important;padding-top:calc(env(safe-area-inset-top) + 8vh)!important;height:100dvh;overflow:hidden}
+.uchip{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;margin-bottom:10px;border-radius:20px;background:rgba(21,128,61,.09);font-size:14px;color:var(--ink)}
+.uchip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.uchip button{border:0;background:none;color:var(--a);font-weight:600;font-size:13px;white-space:nowrap}
+#welcome{position:fixed;inset:0;z-index:90;display:grid;place-items:center;overflow:hidden;background:linear-gradient(160deg,#F3FBF5 0%,#D9F3E1 55%,#B7E8C6 100%)}
+html[data-mode=dark] #welcome{background:linear-gradient(160deg,#06110B,#0A2014 60%,#0E3320)}
+@media(prefers-color-scheme:dark){html[data-mode=auto] #welcome{background:linear-gradient(160deg,#06110B,#0A2014 60%,#0E3320)}}
+.wbox{position:relative;text-align:center;width:min(300px,80vw)}
+.wbox img{width:112px;height:112px;border-radius:28px;box-shadow:0 14px 34px rgba(21,128,61,.3);animation:wpop .7s cubic-bezier(.2,1.4,.4,1) both}
+.wbox p{margin:22px 0 2px;color:var(--mute);font-size:16px}.wbox h1{margin:0 0 26px;font-size:30px;color:var(--ink)}.wbox small{display:block;margin-top:12px;color:var(--mute);font-size:12px}
+.wbar{height:8px;border-radius:8px;background:rgba(21,128,61,.15);overflow:hidden}.wbar i{display:block;height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,#15803D,#4ADE80)}
+#welcome.run .wbar i{animation:wfill var(--wd,5000ms) linear forwards}
+@keyframes wfill{to{width:100%}}@keyframes wpop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.pback{display:flex;align-items:center;gap:12px;flex:none;margin:10px 0 6px}.pback button{border:0;background:var(--card);color:var(--a);font-weight:600;padding:9px 16px;border-radius:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 3px 8px rgba(0,0,0,.08)}.pback b{font-size:15px}
+#ph-ed:not(.inpanel) .pback,#ph-ed:not(.inpanel) .tools{display:none}
+#ph-ed.inpanel #ptabs{display:none}
+#ph-ed:not(.inpanel) .stage{max-height:58vh}#ph-ed:not(.inpanel) #cv{max-height:56vh}
+#ph-ed:not(.inpanel) #ptabs{margin:auto 0 calc(96px + env(safe-area-inset-bottom))}
+#ptabs button{padding:13px 18px;min-width:76px}
 </style></head>
 <body>
 <section id="login">
@@ -129,12 +154,14 @@ nav{background-image:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,25
   <form class="lcard" id="lf">
     <img src="icon-192.png" alt="SW Editor">
     <h1>SW Editor</h1><p>Edit photos and videos anywhere.</p>
+    <div id="usr" class="hide"><div class="uchip"><span id="uem"></span><button type="button" id="chu">Change user</button></div></div>
     <input id="em" type="email" placeholder="Email" autocomplete="username" required>
     <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required>
-    <button class="btn" id="lb" type="submit">Sign in</button>
+    <button class="btn" id="lb" type="submit">Login</button>
     <div id="err" role="alert"></div>
   </form>
 </section>
+<section id="welcome" class="hide"><div class="blob b1"></div><div class="blob b2"></div><div class="wbox"><img src="icon-192.png" alt=""><p id="wgreet"></p><h1 id="wname"></h1><div class="wbar"><i></i></div><small>Getting your studio ready</small></div></section>
 
 <div id="app" class="hide">
   <header><img class="bn" src="banner.png" alt="SW Editor">
@@ -147,12 +174,15 @@ nav{background-image:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,25
       <div id="ph-ed" class="hide">
         <div class="bar"><button class="ib" id="un">Undo</button><button class="ib" id="re">Redo</button><button class="ib" id="bf">Before</button><button class="ib" id="gd">Grid</button><button class="ib" id="zm">Zoom: on</button><button class="ib" id="nw">New photo</button></div>
         <div class="stage" id="stage"><canvas id="cv"></canvas><div class="grid hide" id="grid"></div></div>
-        <div class="seg" id="ptabs" style="margin:12px 0;flex:none"><button data-p="crop" class="on">Crop</button><button data-p="adj">Adjust</button><button data-p="flt">Filters</button><button data-p="skin">Skin</button><button data-p="fx">Effects</button><button data-p="tx">Text</button><button data-p="rs">Resize</button><button data-p="ex">Export</button></div>
-        <div class="tools"><div class="card pp" id="p-crop"><div class="seg" id="ratios"><button data-r="1">1:1</button><button data-r="0.8">4:5</button><button data-r="0.5625">9:16</button><button data-r="1.7778">16:9</button><button data-r="1.3333">4:3</button></div>
+        <div class="seg chips" id="ptabs" style="flex:none"><button data-p="aut">Auto</button><button data-p="flt">Filters</button><button data-p="skin">Skin</button><button data-p="rsh">Reshape</button><button data-p="adj">Adjust</button><button data-p="fx">Effects</button><button data-p="tx">Text</button><button data-p="crop">Crop</button><button data-p="rs">Resize</button><button data-p="ex">Save</button></div>
+        <div class="pback" id="pback"><button type="button" id="pbk">&#8249; Back</button><b id="ptitle"></b></div>
+        <div class="tools"><div class="card pp hide" id="p-crop"><div class="seg" id="ratios"><button data-r="1">1:1</button><button data-r="0.8">4:5</button><button data-r="0.5625">9:16</button><button data-r="1.7778">16:9</button><button data-r="1.3333">4:3</button></div>
           <div class="seg" style="margin-top:10px"><button id="rl">Rotate left</button><button id="rr">Rotate right</button><button id="fh">Flip H</button><button id="fv">Flip V</button></div></div>
         <div class="card pp hide" id="p-adj"><div class="sl"><span>Brightness</span><input type="range" id="a-b" min="-100" max="100" value="0"></div><div class="sl"><span>Contrast</span><input type="range" id="a-c" min="-100" max="100" value="0"></div><div class="sl"><span>Saturation</span><input type="range" id="a-s" min="-100" max="100" value="0"></div><div class="sl"><span>Sharpness</span><input type="range" id="a-sh" min="0" max="100" value="0"></div><div class="sl"><span>Highlights</span><input type="range" id="a-hl" min="-100" max="100" value="0"></div><div class="sl"><span>Shadows</span><input type="range" id="a-sd" min="-100" max="100" value="0"></div><div class="sl"><span>Warmth (cool / warm)</span><input type="range" id="a-wm" min="-100" max="100" value="0"></div><button class="ib" id="a-rs" style="width:auto;padding:0 14px">Reset</button></div>
         <div class="card pp hide" id="p-flt"></div>
         <div class="card pp hide" id="p-skin"></div>
+        <div class="card pp hide" id="p-aut"><div class="sl"><span>Auto strength</span><input type="range" id="au-s" min="0" max="100" value="70"></div><p style="color:var(--mute);font-size:12px;margin-top:8px">Auto improves light, colour, filter, skin and face together. Change any tool afterwards if you want.</p><button class="ib" id="au-re" style="width:auto;padding:0 14px;margin-top:8px">Run auto again</button></div>
+        <div class="card pp hide" id="p-rsh"></div>
         <div class="card pp hide" id="p-fx"></div>
         <div class="card pp hide" id="p-tx"><div class="sl" data-g="Text"><span>Text (tap the photo to place it)</span><input id="t-tt" placeholder="Type your text" style="padding:12px;border-radius:16px;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin-bottom:8px"><input type="range" id="t-tz" min="10" max="100" value="50"></div><div class="sl" data-g="Sticker"><span>Sticker (tap the photo to place it)</span><div class="seg" id="t-em"><button>😀</button><button>😍</button><button>😎</button><button>🔥</button><button>❤️</button><button>⭐</button><button>🎉</button><button>🌸</button><button>👍</button><button>✨</button></div><input type="range" id="t-ss" min="10" max="100" value="40" style="margin-top:10px"></div><button class="ib" id="t-rs" style="width:auto;padding:0 14px">Clear text and sticker</button></div>
         <div class="card pp hide" id="p-rs"><div class="sl"><span id="rs-l">Size 100%</span><input type="range" id="rs-r" min="20" max="100" value="100"></div><button class="btn" id="rs-go">Apply resize</button></div>
@@ -212,7 +242,7 @@ const fb=initializeApp({apiKey:"AIzaSyCqvY3qjtTYmK2D5sLkEK68qk-tbMK7Xks",authDom
 const auth=getAuth(fb);
 const db=initializeFirestore(fb,{localCache:persistentLocalCache()});
 const $=s=>document.querySelector(s),H=document.documentElement;
-let P=[],unsub=null,pid=null,saveT=0,pfo="all",pq="";
+let WL=0,LG=false,WMS=2000,AUP=null,P=[],unsub=null,pid=null,saveT=0,pfo="all",pq="";
 const buzz=()=>{try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}};
 const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
 // themes
@@ -223,12 +253,18 @@ applyTheme();
 for(let i=0;i<9;i++){const d=document.createElement("div");d.className="fl"+(i%2?" v":"");
  d.style.cssText=`left:${5+i*11}%;animation-delay:${-i*1.8}s;animation-duration:${13+i%4*3}s;scale:${.8+i%3*.3}`;$("#fls").append(d)}
 // login
+const SE=ls.get("swEmail");if(SE){$("#em").value=SE;$("#em").classList.add("hide");$("#usr").classList.remove("hide");$("#uem").textContent=SE}
+$("#chu").onclick=()=>{buzz();$("#em").value="";$("#em").classList.remove("hide");$("#usr").classList.add("hide");$("#pw").value="";$("#em").focus()};
+function welcome(u){const ms=LG?5000:2000;WMS=ms;LG=false;const hr=new Date().getHours(),g=hr<5?"Good night":hr<12?"Good morning":hr<17?"Good afternoon":hr<21?"Good evening":"Good night";
+ const nm=(u.email||"").split("@")[0].replace(/[._\d-]+/g," ").trim().replace(/\b\w/g,c=>c.toUpperCase())||"there";
+ $("#wgreet").textContent=g;$("#wname").textContent=nm;const w=$("#welcome");w.style.setProperty("--wd",ms+"ms");$("#login").classList.add("hide");w.classList.remove("hide","run");void w.offsetWidth;w.classList.add("run");
+ setTimeout(()=>{w.classList.add("hide");w.classList.remove("run");$("#app").classList.remove("hide")},ms)}
 $("#lf").onsubmit=async e=>{e.preventDefault();$("#err").textContent="";$("#lb").textContent="Signing in...";
- try{await signInWithEmailAndPassword(auth,$("#em").value.trim(),$("#pw").value)}
- catch(x){$("#err").textContent=({"auth/invalid-credential":"Incorrect email or password.","auth/network-request-failed":"Check your internet connection."})[x.code]||"Couldn't sign in. Try again.";$("#lb").textContent="Sign in"}};
-onAuthStateChanged(auth,u=>{const on=!!u;$("#login").classList.toggle("hide",on);$("#app").classList.toggle("hide",!on);
- $("#lb").textContent="Sign in";if(unsub){unsub();unsub=null}P=[];rP();if(u){$("#who").textContent=u.email;unsub=onSnapshot(collection(db,"users",u.uid,"projects"),sn=>{P=sn.docs.map(d=>({id:d.id,...d.data()}));rP()},()=>{});if(!ls.get("toured"))tour()}});
-$("#out").onclick=()=>{buzz();signOut(auth)};
+ LG=true;try{const E=$("#em").value.trim();await signInWithEmailAndPassword(auth,E,$("#pw").value);ls.set("swEmail",E)}
+ catch(x){$("#err").textContent=({"auth/invalid-credential":"Incorrect email or password.","auth/network-request-failed":"Check your internet connection."})[x.code]||"Couldn't sign in. Try again.";$("#lb").textContent="Login"}};
+onAuthStateChanged(auth,u=>{const on=!!u;if(on&&!WL){WL=1;welcome(u)}else if(!on){WL=0;$("#welcome").classList.add("hide");$("#login").classList.remove("hide");$("#app").classList.add("hide")}
+ $("#lb").textContent="Login";if(unsub){unsub();unsub=null}P=[];rP();if(u){$("#who").textContent=u.email;unsub=onSnapshot(collection(db,"users",u.uid,"projects"),sn=>{P=sn.docs.map(d=>({id:d.id,...d.data()}));rP()},()=>{});if(!ls.get("toured"))setTimeout(tour,WMS+300)}});
+$("#out").onclick=()=>{buzz();WL=0;signOut(auth)};
 // nav
 $("#nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;buzz();
  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
@@ -251,8 +287,8 @@ function tour(){const P=[["🖼️","Photo edit","Crop, filters, retouch and tex
 
 // ---- photo editor (Part 2)
 const cv=$("#cv"),cx=cv.getContext("2d");
-const ADJ=[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"],["hl","a-hl"],["sd","a-sd"],["wm","a-wm"]],FX=[["vg","Vignette"],["gr","Grain / film"],["bb","Background blur (outside the face, tap the face first)"]];
-const DEF=()=>({b:0,c:0,s:0,sh:0,f:'',fs:100,sm:0,gl:0,tn:0,ev:0,wr:0,sy:0,tp:0,wh:0,bd:0,fr:0,fx:.5,fy:.4,hl:0,sd:0,wm:0,vg:0,gr:0,bb:0,tw:0,eb:0,tt:"",tz:50,tx:.5,ty:.85,st:"",ss:40,sx:.5,sy:.5});
+const ADJ=[["b","a-b"],["c","a-c"],["s","a-s"],["sh","a-sh"],["hl","a-hl"],["sd","a-sd"],["wm","a-wm"]],RSH=[["fsl","Face slim"],["jw","Jaw"],["ns","Nose"],["ey","Eyes size"]],FX=[["vg","Vignette"],["gr","Grain / film"],["bb","Background blur (outside the face, tap the face first)"]];
+const DEF=()=>({b:0,c:0,s:0,sh:0,f:'',fs:100,sm:0,gl:0,tn:0,ev:0,wr:0,sy:0,tp:0,wh:0,bd:0,fr:0,fx:.5,fy:.4,fsl:0,jw:0,ns:0,ey:0,hl:0,sd:0,wm:0,vg:0,gr:0,bb:0,tw:0,eb:0,tt:"",tz:50,tx:.5,ty:.85,st:"",ss:40,sx:.5,sy:.5});
 let base=null,pv=null,adj=DEF(),hist=[],hi=-1,fmt="jpeg",qual=.95,ct=false,ch=false,skinOpen=false,zm=true,curP="crop",txg=0;
 const mk=(w,h)=>{const c=document.createElement("canvas");c.width=Math.max(1,Math.round(w));c.height=Math.max(1,Math.round(h));return c};
 const fit=(i,m)=>{const k=Math.min(1,m/Math.max(i.width,i.height)),c=mk(i.width*k,i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);return c};
@@ -265,7 +301,17 @@ function bl(s,w,h,r,ch){const T=new s.constructor(s.length),O=new s.constructor(
  for(let x=0;x<w;x++)for(let c=0;c<ch;c++){let a=0;for(let y=-r;y<=r;y++)a+=T[(cl(y,h-1)*w+x)*ch+c];for(let y=0;y<h;y++){O[(y*w+x)*ch+c]=a/n;a+=T[(cl(y+r+1,h-1)*w+x)*ch+c]-T[(cl(y-r,h-1)*w+x)*ch+c]}}
  return O}
 const ed=(r,g,b,L,i)=>{const q=Math.abs(r-L[i])+Math.abs(g-L[i+1])+Math.abs(b-L[i+2]);return q>=70?.15:1-.85*q/70};
-function post(o,a){const w=o.width,h=o.height,x=o.getContext("2d");
+function warp(o,a){if(!a.fr||!(a.fsl||a.jw||a.ns||a.ey))return;const w=o.width,h=o.height,g=o.getContext("2d"),id=g.getImageData(0,0,w,h),S=id.data,D=new Uint8ClampedArray(S),cx=a.fx*w,cy=a.fy*h,R=a.fr/100*Math.min(w,h),exs=[cx-.36*R,cx+.36*R],eyy=cy-.1*R,fall=d=>d>=1?0:(1-d*d)*(1-d*d);
+ const x0=Math.max(0,(cx-1.8*R)|0),x1=Math.min(w-1,(cx+1.8*R)|0),y0=Math.max(0,(cy-1.8*R)|0),y1=Math.min(h-1,(cy+1.8*R)|0);
+ for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){let sx=x,sy=y;
+  if(a.fsl)sx+=(x-cx)*a.fsl/100*.22*fall(Math.hypot(x-cx,(y-cy)*.8)/(1.25*R));
+  if(a.jw)sx+=(x-cx)*a.jw/100*.3*fall(Math.hypot(x-cx,y-(cy+.6*R))/(.8*R));
+  if(a.ns)sx+=(x-cx)*a.ns/100*.5*fall(Math.hypot(x-cx,y-(cy+.2*R))/(.3*R));
+  if(a.ey)for(const ex of exs){const dd=Math.hypot(x-ex,y-eyy)/(.22*R);if(dd<1){const m=1-a.ey/100*.45*fall(dd);sx=ex+(sx-ex)*m;sy=eyy+(sy-eyy)*m}}
+  if(sx===x&&sy===y)continue;sx=Math.max(0,Math.min(w-1.001,sx));sy=Math.max(0,Math.min(h-1.001,sy));const ix=sx|0,iy=sy|0,fx=sx-ix,fy=sy-iy,i=(y*w+x)*4,p0=(iy*w+ix)*4,p1=p0+4,p2=p0+w*4,p3=p2+4;
+  for(let c=0;c<3;c++)D[i+c]=(S[p0+c]*(1-fx)+S[p1+c]*fx)*(1-fy)+(S[p2+c]*(1-fx)+S[p3+c]*fx)*fy}
+ g.putImageData(new ImageData(D,w,h),0,0)}
+function post(o,a){const w=o.width,h=o.height,x=o.getContext("2d");warp(o,a);
  if(a.hl||a.sd||a.wm||a.vg||a.gr||a.bb||(a.fr&&(a.tw||a.eb))){const id=x.getImageData(0,0,w,h),d=id.data,bs=a.bb?bl(d,w,h,Math.max(3,Math.round(w/28)),4):null,cx0=a.fx*w,cy0=a.fy*h,fr=(a.fr||26)/100*Math.min(w,h);
   for(let p=0;p<w*h;p++){const i=p*4,xx=p%w,yy=(p/w)|0;let r=d[i],g=d[i+1],b=d[i+2];const l=.299*r+.587*g+.114*b;
    if(a.bb){const R=fr*2.4,dd=Math.hypot((xx-cx0)/R,(yy-cy0)/(R*2.2));if(dd>1){const t=Math.min(1,(dd-1)/.6)*a.bb/100;r+=(bs[i]-r)*t;g+=(bs[i+1]-g)*t;b+=(bs[i+2]-b)*t}}
@@ -309,11 +355,11 @@ const render=()=>{const o=(ct||ch)?pv:proc(pv,adj);cv.width=o.width;cv.height=o.
  if(skinOpen&&adj.fr&&zm){cv.style.transformOrigin=adj.fx*100+"% "+adj.fy*100+"%";cv.style.transform="scale(1.7)"}else cv.style.transform=""};
 function upd(){$("#un").disabled=hi<=0;$("#re").disabled=hi>=hist.length-1}
 function commit(){clearTimeout(saveT);saveT=setTimeout(saveP,3000);hist=hist.slice(0,hi+1);hist.push({c:base,a:{...adj}});if(hist.length>12)hist.shift();hi=hist.length-1;upd()}
-function sync(){ADJ.forEach(([k,id])=>$("#"+id).value=adj[k]);SK.forEach(([k])=>$("#k-"+k).value=adj[k]);$("#fs").value=adj.fs;FX.forEach(([k])=>$("#x-"+k).value=adj[k]);$("#t-tt").value=adj.tt||"";$("#t-tz").value=adj.tz;$("#t-ss").value=adj.ss;markF()}
+function sync(){ADJ.forEach(([k,id])=>$("#"+id).value=adj[k]);SK.forEach(([k])=>$("#k-"+k).value=adj[k]);$("#fs").value=adj.fs;FX.forEach(([k])=>$("#x-"+k).value=adj[k]);RSH.forEach(([k])=>$("#r-"+k).value=adj[k]);$("#t-tt").value=adj.tt||"";$("#t-tz").value=adj.tz;$("#t-ss").value=adj.ss;markF()}
 function setBase(c,push=true){base=c;pv=fit(c,1100);render();if(push)commit()}
 function restore(i){hi=i;base=hist[i].c;adj={...hist[i].a};pv=fit(base,1100);sync();render();upd()}
 $("#un").onclick=()=>{if(hi>0){buzz();restore(hi-1)}};$("#re").onclick=()=>{if(hi<hist.length-1){buzz();restore(hi+1)}};
-$("#file").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{adj=DEF();sync();pid=null;hist=[];hi=-1;setBase(fit(im,3000));$("#ph-empty").classList.add("hide");$("#ph-ed").classList.remove("hide");URL.revokeObjectURL(im.src)};im.src=URL.createObjectURL(f);e.target.value=""};
+$("#file").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{adj=DEF();AUP=null;sync();pid=null;hist=[];hi=-1;setBase(fit(im,3000));$("#ph-empty").classList.add("hide");$("#ph-ed").classList.remove("hide");closeP();URL.revokeObjectURL(im.src)};im.src=URL.createObjectURL(f);e.target.value=""};
 $("#nw").onclick=()=>{pid=null;$("#ph-ed").classList.add("hide");$("#ph-empty").classList.remove("hide")};
 const geo=fn=>{buzz();const n=fn(base);setBase(n)};
 $("#rl").onclick=()=>geo(b=>{const n=mk(b.height,b.width),x=n.getContext("2d");x.translate(n.width/2,n.height/2);x.rotate(-Math.PI/2);x.drawImage(b,-b.width/2,-b.height/2);return n});
@@ -332,7 +378,11 @@ $("#bf").onclick=e=>{ct=!ct;e.target.textContent=ct?"After":"Before";render()};
 cv.onpointerdown=()=>{if(!skinOpen&&curP!=="tx"){ch=true;render()}};
 cv.onpointerup=cv.onpointercancel=cv.onpointerleave=()=>{if(ch){ch=false;render()}};
 cv.onclick=e=>{if(ct)return;const r=cv.getBoundingClientRect();if(curP==="tx"){adj[txg?"sx":"tx"]=(e.clientX-r.left)/r.width;adj[txg?"sy":"ty"]=(e.clientY-r.top)/r.height;buzz();render();commit();return}if(!skinOpen)return;adj.fx=(e.clientX-r.left)/r.width;adj.fy=(e.clientY-r.top)/r.height;if(!adj.fr)adj.fr=22;$("#k-fr").value=adj.fr;buzz();render();commit()};
-$("#ptabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;buzz();skinOpen=p==="skin";curP=p;render();document.querySelectorAll("#ptabs button").forEach(b=>b.classList.toggle("on",b===e.target));document.querySelectorAll(".pp").forEach(x=>x.classList.toggle("hide",x.id!=="p-"+p))};
+const TT={aut:"Auto enhance",flt:"Filters",skin:"Skin",rsh:"Reshape",adj:"Adjust",fx:"Effects",tx:"Text",crop:"Crop",rs:"Resize",ex:"Save and export"};
+function openP(p){if(!base)return;curP=p;skinOpen=p==="skin"||p==="rsh";render();document.querySelectorAll(".pp").forEach(x=>x.classList.toggle("hide",x.id!=="p-"+p));$("#ph-ed").classList.add("inpanel");$("#ptitle").textContent=TT[p]||""}
+function closeP(){curP="";skinOpen=false;if(base)render();document.querySelectorAll(".pp").forEach(x=>x.classList.add("hide"));$("#ph-ed").classList.remove("inpanel")}
+$("#ptabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;buzz();openP(p);if(p==="aut"&&!AUP)autoRun()};
+$("#pbk").onclick=()=>{buzz();closeP()};
 const segPick=(id,fn)=>$(id).onclick=e=>{if(!e.target.dataset.v)return;buzz();document.querySelectorAll(id+" button").forEach(b=>b.classList.toggle("on",b===e.target));fn(e.target.dataset.v)};
 segPick("#fm",v=>fmt=v);segPick("#ql",v=>qual=+v);
 $("#ex-go").onclick=()=>{buzz();const o=proc(base,adj),ext=fmt==="png"?"png":"jpg";o.toBlob(bl=>{const f=new File([bl],"SW-Editor."+ext,{type:bl.type});
@@ -427,13 +477,24 @@ function rP(){const L=$("#plist");if(!L)return;const fo=[...new Set(P.map(p=>p.f
 $("#pq").oninput=e=>{pq=e.target.value;rP()};
 $("#pfo").onclick=e=>{const f=e.target.dataset.f;if(f){pfo=f.replace(/&amp;/g,"&");rP()}};
 $("#plist").onclick=async e=>{const a=e.target.dataset.a,c=e.target.closest("[data-id]");if(!a||!c)return;const p=P.find(x=>x.id===c.dataset.id);if(!p)return;buzz();
- if(a==="open"){const im=new Image();im.onload=()=>{pid=p.id;hist=[];hi=-1;adj={...DEF(),...JSON.parse(p.adj||"{}")};sync();setBase(fit(im,3000));$("#ph-empty").classList.add("hide");$("#ph-ed").classList.remove("hide");document.querySelector('nav [data-t=photo]').click()};im.src=p.img}
+ if(a==="open"){const im=new Image();im.onload=()=>{pid=p.id;hist=[];hi=-1;adj={...DEF(),...JSON.parse(p.adj||"{}")};sync();setBase(fit(im,3000));$("#ph-empty").classList.add("hide");$("#ph-ed").classList.remove("hide");closeP();document.querySelector('nav [data-t=photo]').click()};im.src=p.img}
  else if(a==="fav")setDoc(pref(p.id),{fav:!p.fav},{merge:true});
  else if(a==="ren"){const n=prompt("New name",p.name);if(n)setDoc(pref(p.id),{name:n.slice(0,60)},{merge:true})}
  else if(a==="mv"){const n=prompt("Folder name (empty = no folder)",p.folder||"");if(n!==null)setDoc(pref(p.id),{folder:n.trim().slice(0,30)},{merge:true})}
  else if(a==="del"&&confirm("Delete this project?")){if(pid===p.id)pid=null;deleteDoc(pref(p.id))}};
 $("#ex-pv").onclick=()=>{if(!base)return;buzz();sheet(`<h3>Preview</h3><img src="${proc(base,adj).toDataURL("image/jpeg",.85)}" alt="" style="max-width:100%;border-radius:14px">`)};
 rP();
+// ---- Part 9: reshape + auto
+$("#p-rsh").innerHTML=RSH.map(([k,n])=>`<div class="sl"><span>${n} (tap the face first)</span><input type="range" id="r-${k}" min="-100" max="100" value="0"></div>`).join("");
+RSH.forEach(([k])=>{const el=$("#r-"+k);let q=0;el.oninput=()=>{adj[k]=+el.value;if(!q)q=requestAnimationFrame(()=>{q=0;render()})};el.onchange=()=>{adj[k]=+el.value;render();commit()}});
+const AK=["b","c","s","sh","hl","sd","wm","sm","gl","tn","ev","tw","eb"],cl2=(v,a,b)=>Math.max(a,Math.min(b,v));
+function autoApply(p){if(!AUP)return;const k=p/100;AK.forEach(n=>adj[n]=Math.round((AUP[n]||0)*k));adj.f=k>0?AUP.f:"";adj.fs=Math.round(45*k);sync();render()}
+function autoRun(){if(!base)return;const t=fit(pv,160),W=t.width,H=t.height,d=t.getContext("2d").getImageData(0,0,W,H).data,n=W*H;let L=0,L2=0,Sa=0,R=0,B=0,sk=0,sx=0,sy=0,sxx=0,syy=0;
+ for(let p=0;p<n;p++){const i=p*4,r=d[i],g=d[i+1],b=d[i+2],l=.299*r+.587*g+.114*b;L+=l;L2+=l*l;Sa+=Math.max(r,g,b)-Math.min(r,g,b);R+=r;B+=b;const cb=128-.1687*r-.3313*g+.5*b,cr=128+.5*r-.4187*g-.0813*b;if(cb>77&&cb<127&&cr>133&&cr<173&&r>60){const x=p%W,y=(p/W)|0;sk++;sx+=x;sy+=y;sxx+=x*x;syy+=y*y}}
+ const m=L/n,sd=Math.sqrt(Math.max(0,L2/n-m*m)),sat=Sa/n,rb=(R+1)/(B+1),P={b:Math.round(cl2((125-m)*.55,-25,35)),c:Math.round(cl2((58-sd)*.5,-5,25)),s:Math.round(cl2((60-sat)*.35,0,22)),sh:25,hl:m>170?-12:0,sd:m<100?18:6,wm:rb>1.25?-6:rb<.95?6:0,f:sat<35?"Vivid":m<85?"Warm glow":m>170?"Moody":"Soft"};
+ if(sk/n>.03){P.sm=35;P.gl=22;P.tn=10;P.ev=20;P.tw=20;P.eb=20;if(!adj.fr){const mx=sx/sk,my=sy/sk,sg=Math.sqrt(Math.max(1,sxx/sk-mx*mx+syy/sk-my*my));adj.fx=mx/W;adj.fy=my/H;adj.fr=Math.round(cl2(sg*1.7/Math.min(W,H)*100,12,45))}}
+ AUP=P;$("#au-s").value=70;autoApply(70);commit()}
+$("#au-s").oninput=e=>autoApply(+e.target.value);$("#au-s").onchange=()=>commit();$("#au-re").onclick=()=>{buzz();AUP=null;autoRun()};
 // ---- tool tabs, effects, text (Part 8)
 function chipify(root,sel,cb,before){const it=[...root.querySelectorAll(sel)];if(!it.length)return;const bar=document.createElement("div");bar.className="seg chips";
  const pick=(i,u)=>{it.forEach((e,j)=>e.classList.toggle("hide",j!==i));[...bar.children].forEach((b,j)=>b.classList.toggle("on",j===i));if(cb)cb(i);if(u)buzz()};
@@ -444,7 +505,7 @@ FX.forEach(([k])=>{const el=$("#x-"+k);let q=0;el.oninput=()=>{adj[k]=+el.value;
 const tIn=(id,k)=>{const el=$(id);el.oninput=()=>{adj[k]=k==="tt"?el.value:+el.value;render()};el.onchange=()=>{render();commit()}};tIn("#t-tt","tt");tIn("#t-tz","tz");tIn("#t-ss","ss");
 $("#t-em").onclick=e=>{if(e.target.tagName!=="BUTTON")return;buzz();adj.st=e.target.textContent;render();commit()};
 $("#t-rs").onclick=()=>{adj.tt="";adj.st="";$("#t-tt").value="";render();commit()};
-chipify($("#p-adj"),".sl");chipify($("#p-skin"),".sl");chipify($("#p-fx"),".sl");chipify($("#p-tx"),".sl",i=>txg=i);
+chipify($("#p-adj"),".sl");chipify($("#p-rsh"),".sl");chipify($("#p-skin"),".sl");chipify($("#p-fx"),".sl");chipify($("#p-tx"),".sl",i=>txg=i);
 // video
 const vsl=(id,fn)=>$(id).oninput=e=>{fn(+e.target.value);show()};
 vsl("#vab",v=>vadj.b=v);vsl("#vac",v=>vadj.c=v);vsl("#vasat",v=>vadj.s=v);vsl("#vfi",v=>vfi=v);vsl("#vfo",v=>vfo=v);vsl("#vts",v=>vts=v);vsl("#vte",v=>vte=v);
